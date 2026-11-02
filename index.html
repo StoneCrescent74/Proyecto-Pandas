@@ -238,7 +238,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 <section id="carga-y-estructura" class="level3">
 <h3 class="anchored" data-anchor-id="carga-y-estructura">2.1 Carga y estructura</h3>
 <p>Conservamos una copia original para comparar los datos antes y después de las transformaciones.</p>
-<div id="7d3945ac" class="cell" data-execution_count="1">
+<div id="9599d36d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -292,9 +292,9 @@ memory usage: 2.3 MB</code></pre>
 </section>
 <section id="resumen-descriptivo" class="level3">
 <h3 class="anchored" data-anchor-id="resumen-descriptivo">2.2 Resumen descriptivo</h3>
-<div id="27169970" class="cell" data-execution_count="2">
+<div id="1c37bc14" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe(include<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 
 
@@ -402,13 +402,13 @@ memory usage: 2.3 MB</code></pre>
 </section>
 <section id="detección-de-nulos-y-duplicados" class="level3">
 <h3 class="anchored" data-anchor-id="detección-de-nulos-y-duplicados">2.3 Detección de nulos y duplicados</h3>
-<div id="e309b52e" class="cell" data-execution_count="3">
+<div id="4d103e6d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auditoria_nulos <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nulos"</span>: df.isna().<span class="bu">sum</span>(),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"porcentaje_nulos"</span>: (df.isna().mean() <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>auditoria_nulos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <div>
 
 
@@ -503,7 +503,7 @@ memory usage: 2.3 MB</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: un nulo en una etiqueta opcional no justifica borrar todo el ticket. La ausencia de prioridad o departamento sí limita los análisis que utilizan esas variables.</p>
-<div id="cb57b80f" class="cell" data-execution_count="4">
+<div id="b29978d3" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>duplicados_exactos <span class="op">=</span> <span class="bu">int</span>(df.duplicated().<span class="bu">sum</span>())</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Filas completamente duplicadas: </span><span class="sc">{</span>duplicados_exactos<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -515,7 +515,7 @@ memory usage: 2.3 MB</code></pre>
 <section id="normalización-de-categorías" class="level3">
 <h3 class="anchored" data-anchor-id="normalización-de-categorías">2.4 Normalización de categorías</h3>
 <p>Eliminamos espacios al principio y al final y normalizamos mayúsculas y minúsculas. Las categorías vacías pasan a ser valores ausentes.</p>
-<div id="7b385f27" class="cell" data-execution_count="5">
+<div id="ab699a19" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>columnas_categoricas <span class="op">=</span> [<span class="st">"queue"</span>, <span class="st">"priority"</span>, <span class="st">"type"</span>, <span class="st">"language"</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> columna <span class="kw">in</span> columnas_categoricas:</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    df[columna] <span class="op">=</span> df[columna].astype(<span class="st">"string"</span>).<span class="bu">str</span>.strip().replace(<span class="st">""</span>, pd.NA)</span>
@@ -544,7 +544,7 @@ Filas conservadas: 20000</code></pre>
 <section id="tres-resúmenes-estadísticos-clave" class="level3">
 <h3 class="anchored" data-anchor-id="tres-resúmenes-estadísticos-clave">2.5 Tres resúmenes estadísticos clave</h3>
 <p>Los porcentajes se calculan sobre el total de filas, incluyendo los valores ausentes en el resumen.</p>
-<div id="47063f14" class="cell" data-execution_count="6">
+<div id="4089e4dc" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen_categorias(serie):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    frecuencias <span class="op">=</span> serie.value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({</span>
@@ -554,10 +554,10 @@ Filas conservadas: 20000</code></pre>
 </div>
 <section id="resumen-1-prioridades" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-1-prioridades">Resumen 1: prioridades</h4>
-<div id="a2ff44ae" class="cell" data-execution_count="7">
+<div id="705be351" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>resumen_prioridades <span class="op">=</span> resumen_categorias(df[<span class="st">"priority"</span>])</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>resumen_prioridades</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <div>
 
 
@@ -600,10 +600,10 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="resumen-2-idiomas" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-2-idiomas">Resumen 2: idiomas</h4>
-<div id="ded1b375" class="cell" data-execution_count="8">
+<div id="71cdfcd8" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>resumen_idiomas <span class="op">=</span> resumen_categorias(df[<span class="st">"language"</span>])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>resumen_idiomas</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <div>
 
 
@@ -641,10 +641,10 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="resumen-3-tipos-de-ticket" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-3-tipos-de-ticket">Resumen 3: tipos de ticket</h4>
-<div id="7d45f8a2" class="cell" data-execution_count="9">
+<div id="a0bb6a17" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>resumen_tipos <span class="op">=</span> resumen_categorias(df[<span class="st">"type"</span>])</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>resumen_tipos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <div>
 
 
@@ -693,9 +693,9 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="selección-por-posición-con-iloc" class="level3">
 <h3 class="anchored" data-anchor-id="selección-por-posición-con-iloc">2.6 Selección por posición con <code>iloc</code></h3>
-<div id="3878150e" class="cell" data-execution_count="10">
+<div id="aa2cca89" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>, :<span class="dv">7</span>]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="31">
 <div>
 
 
@@ -777,14 +777,14 @@ Filas conservadas: 20000</code></pre>
 <section id="agrupación-con-groupby" class="level3">
 <h3 class="anchored" data-anchor-id="agrupación-con-groupby">3.1 Agrupación con <code>groupby</code></h3>
 <p>Contamos los tickets de cada combinación de departamento y tipo.</p>
-<div id="2783bd59" class="cell" data-execution_count="11">
+<div id="e7264a0d" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>carga_por_cola <span class="op">=</span> (</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"type"</span>], dropna<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>carga_por_cola</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="32">
 <div>
 
 
@@ -883,7 +883,7 @@ Filas conservadas: 20000</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: <code>groupby</code> forma grupos, <code>size()</code> cuenta filas y <code>unstack()</code> convierte tipos en columnas. Incluimos grupos con categorías ausentes. La tabla mide volumen, no esfuerzo de resolución.</p>
-<div id="b065fb5d" class="cell" data-execution_count="12">
+<div id="8173648b" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>volumen_por_cola <span class="op">=</span> df[<span class="st">"queue"</span>].value_counts()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    cola_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
@@ -905,7 +905,7 @@ Filas conservadas: 20000</code></pre>
 <section id="tabla-dinámica-con-pivot_table" class="level3">
 <h3 class="anchored" data-anchor-id="tabla-dinámica-con-pivot_table">3.2 Tabla dinámica con <code>pivot_table</code></h3>
 <p>Utilizamos una columna auxiliar de valor 1 para contar registros sin depender de que el asunto esté informado.</p>
-<div id="7e89c02d" class="cell" data-execution_count="13">
+<div id="d94ae459" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_pivot <span class="op">=</span> df.assign(numero_ticket<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tabla_dinamica <span class="op">=</span> pd.pivot_table(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    df_pivot,</span>
@@ -916,7 +916,7 @@ Filas conservadas: 20000</code></pre>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    fill_value<span class="op">=</span><span class="dv">0</span></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>tabla_dinamica</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="34">
 <div>
 
 
@@ -956,7 +956,7 @@ Filas conservadas: 20000</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: cada celda cuenta tickets por prioridad e idioma, excluyendo registros sin alguna de estas categorías. Un idioma con más tickets urgentes también puede tener más tickets en general; no debe confundirse volumen con proporción de urgencia.</p>
-<div id="11dd3a27" class="cell" data-execution_count="14">
+<div id="c6784bb5" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>altos_por_idioma <span class="op">=</span> (</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    df.loc[df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>).fillna(<span class="va">False</span>), <span class="st">"language"</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    .value_counts()</span>
@@ -979,7 +979,7 @@ Filas conservadas: 20000</code></pre>
 <section id="filtrado-avanzado-con-loc" class="level3">
 <h3 class="anchored" data-anchor-id="filtrado-avanzado-con-loc">3.3 Filtrado avanzado con <code>loc</code></h3>
 <p>Seleccionamos prioridad alta y tipo incidente, mostrando las columnas relevantes para una primera revisión.</p>
-<div id="2eb8fcdc" class="cell" data-execution_count="15">
+<div id="07e38f40" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>condicion_urgentes <span class="op">=</span> (</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>) <span class="op">&amp;</span> df[<span class="st">"type"</span>].eq(<span class="st">"incident"</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>).fillna(<span class="va">False</span>)</span>
@@ -995,7 +995,7 @@ Filas conservadas: 20000</code></pre>
 <pre><code>Incidentes de prioridad alta: 3526
 Porcentaje sobre el total: 17.63%</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="36">
 <div>
 
 
@@ -1080,7 +1080,7 @@ Porcentaje sobre el total: 17.63%</code></pre>
 <section id="combinación-de-subconjuntos-con-concat" class="level3">
 <h3 class="anchored" data-anchor-id="combinación-de-subconjuntos-con-concat">3.4 Combinación de subconjuntos con <code>concat</code></h3>
 <p>Como demostración didáctica, reunimos tickets en inglés y alemán.</p>
-<div id="5126268f" class="cell" data-execution_count="16">
+<div id="b8892fe9" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_ingles <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"en"</span>).fillna(<span class="va">False</span>)].copy()</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df_aleman <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"de"</span>).fillna(<span class="va">False</span>)].copy()</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>df_combinado <span class="op">=</span> pd.concat([df_ingles, df_aleman], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
@@ -1098,7 +1098,7 @@ Tickets combinados: 20000
 Tickets del dataset completo: 20000
 Tickets no incluidos: 0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="16">
+<div class="cell-output cell-output-display" data-execution_count="37">
 <div>
 
 
@@ -1227,7 +1227,7 @@ Tickets no incluidos: 0</code></pre>
 <h2 class="anchored" data-anchor-id="visualizaciones">4. Visualizaciones</h2>
 <section id="preparación-de-prioridades-y-colores" class="level3">
 <h3 class="anchored" data-anchor-id="preparación-de-prioridades-y-colores">4.1 Preparación de prioridades y colores</h3>
-<div id="68c337c7" class="cell" data-execution_count="17">
+<div id="b6abcb5b" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>prioridades_presentes <span class="op">=</span> df[<span class="st">"priority"</span>].dropna().unique().tolist()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>orden_base <span class="op">=</span> [<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>]</span>
@@ -1253,7 +1253,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-estático-tickets-por-prioridad" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-estático-tickets-por-prioridad">4.2 Gráfico estático: tickets por prioridad</h3>
-<div id="a5d06a88" class="cell" data-execution_count="18">
+<div id="d84e048f" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conteo <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts().reindex(orden_prioridad, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fig_estatico, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">4.5</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>barras <span class="op">=</span> ax.bar(</span>
@@ -1282,7 +1282,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-estático-carga-por-departamento-y-prioridad" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-estático-carga-por-departamento-y-prioridad">4.3 Gráfico estático: carga por departamento y prioridad</h3>
-<div id="a62262a2" class="cell" data-execution_count="19">
+<div id="4d81ed9f" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_apilado <span class="op">=</span> (</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
@@ -1320,7 +1320,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-interactivo-con-plotly" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-interactivo-con-plotly">4.4 Gráfico interactivo con Plotly</h3>
-<div id="e212dd21" class="cell" data-execution_count="20">
+<div id="0bf2dbc0" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_plotly <span class="op">=</span> (</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    .reset_index(name<span class="op">=</span><span class="st">"cantidad"</span>)</span>
@@ -1344,9 +1344,9 @@ Tickets sin departamento: 0</code></pre>
 <span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    fig.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="0d9730c2-217e-4b82-b201-2f6a2ce7f4e9" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("0d9730c2-217e-4b82-b201-2f6a2ce7f4e9")) {                    Plotly.newPlot(                        "0d9730c2-217e-4b82-b201-2f6a2ce7f4e9",                        [{"alignmentgroup":"True","hovertemplate":"Prioridad=low\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=medium\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=high\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"},"tickangle":-35},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"Tickets por departamento y prioridad"},"barmode":"group","font":{"family":"Arial","size":12},"margin":{"b":130},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="6aa9727c-78e6-43eb-9457-8c3b8aea97e0" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("6aa9727c-78e6-43eb-9457-8c3b8aea97e0")) {                    Plotly.newPlot(                        "6aa9727c-78e6-43eb-9457-8c3b8aea97e0",                        [{"alignmentgroup":"True","hovertemplate":"Prioridad=low\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=medium\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=high\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"},"tickangle":-35},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"Tickets por departamento y prioridad"},"barmode":"group","font":{"family":"Arial","size":12},"margin":{"b":130},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('0d9730c2-217e-4b82-b201-2f6a2ce7f4e9');
+var gd = document.getElementById('6aa9727c-78e6-43eb-9457-8c3b8aea97e0');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -1386,7 +1386,7 @@ if (outputEl) {{
 <h2 class="anchored" data-anchor-id="conclusiones">5. Conclusiones</h2>
 <section id="resultados-calculados" class="level3">
 <h3 class="anchored" data-anchor-id="resultados-calculados">5.1 Resultados calculados</h3>
-<div id="97180260" class="cell" data-execution_count="21">
+<div id="35c54e63" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Registros analizados: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    departamento_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>

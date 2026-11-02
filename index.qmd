@@ -27,6 +27,8 @@ El dataset contiene tickets generados sintéticamente y se distribuye bajo la li
 
 Incluye departamentos técnicos y otras áreas de atención al cliente. Por tanto, no todos los tickets representan fallos de infraestructura.
 
+Para demostrar el tratamiento temporal sin modificar el dataset, el apartado 4.5 incorpora un escenario de prueba con fechas artificiales. Este escenario se mantiene separado de las conclusiones descriptivas del CSV.
+
 ### 1.2 Columnas principales
 
 | Columna | Significado | Utilidad |
@@ -43,7 +45,8 @@ Incluye departamentos técnicos y otras áreas de atención al cliente. Por tant
 2. ¿Qué departamentos concentran más tickets y de qué tipo?
 3. ¿Cómo se relacionan prioridad e idioma?
 4. ¿Qué tickets combinan prioridad alta y tipo incidente?
-5. ¿Qué limitaciones tienen estos datos para tomar decisiones operativas?
+5. ¿Cómo se construye y explora una serie temporal de prueba con fechas explícitamente simuladas?
+6. ¿Qué limitaciones tienen estos datos para tomar decisiones operativas?
 
 ## 2. Exploración inicial y limpieza
 
@@ -397,13 +400,127 @@ Interpretación técnica: el ratón permite consultar valores exactos y la leyen
 
 Acción propuesta: examinar los tickets de prioridad alta por departamento y seleccionar áreas que necesiten revisión detallada.
 
-### 4.5 Limitación del requisito temporal
+### 4.5 Serie temporal simulada: demostración técnica
 
-El gráfico interactivo compara categorías, pero no representa evolución temporal. La lista de columnas se muestra en el apartado 2.1 y debe revisarse para comprobar si existe una fecha de creación válida.
+::: {.callout-warning title="SIMULACIÓN: fechas artificiales, no observadas"}
+El CSV original no incluye una columna de fecha de apertura. En este apartado se asignan fechas artificiales únicamente para demostrar una agregación temporal con Pandas y un gráfico interactivo con Plotly. No se reconstruye la historia de los tickets ni se estudia demanda real. La simulación no garantiza por sí sola la aceptación académica de un requisito que pudiera exigir fechas originales.
+:::
 
-No se utilizarán el orden de filas ni una columna de versión como sustitutos de fechas. Si no existe una variable temporal adecuada, será necesario incorporar datos con fechas o consultar al profesor si acepta esta alternativa categórica.
+#### Método de simulación
 
-El requisito temporal queda pendiente: no se considera cumplido únicamente por disponer de un gráfico interactivo.
+El intervalo del 1 de enero al 31 de marzo de 2026 se elige arbitrariamente como calendario de prueba; no procede de la fuente. Cada fila recibe al azar un día de ese intervalo, con la misma probabilidad para todos los días. No se utilizan el índice de la fila, el texto de los tickets ni su prioridad para inferir fechas. No se incorporan patrones de fines de semana, picos ni estacionalidad.
+
+Creamos `df_simulacion` como copia independiente. El CSV, `df_original` y `df` permanecen intactos. La columna se llama `fecha_simulada` para distinguirla de cualquier fecha observada.
+
+```{python}
+import numpy as np
+
+SEMILLA_SIMULACION = 42
+INICIO_SIMULACION = pd.Timestamp("2026-01-01")
+FIN_SIMULACION = pd.Timestamp("2026-03-31")
+
+calendario_simulado = pd.date_range(
+    INICIO_SIMULACION, FIN_SIMULACION, freq="D"
+)
+
+rng_simulacion = np.random.default_rng(SEMILLA_SIMULACION)
+desplazamientos_simulados = rng_simulacion.integers(
+    low=0,
+    high=len(calendario_simulado),
+    size=len(df)
+)
+
+df_simulacion = df.copy()
+df_simulacion["fecha_simulada"] = (
+    INICIO_SIMULACION
+    + pd.to_timedelta(desplazamientos_simulados, unit="D")
+)
+
+print("SIMULACIÓN TÉCNICA: fechas artificiales, no procedentes del CSV.")
+print(f"Semilla utilizada: {SEMILLA_SIMULACION}")
+print(f"Filas con fecha simulada: {len(df_simulacion)}")
+print(f"Días del calendario de prueba: {len(calendario_simulado)}")
+df_simulacion.loc[
+    :, ["queue", "priority", "type", "fecha_simulada"]
+].head(5)
+```
+
+Interpretación técnica: la semilla fija permite repetir la asignación con los mismos datos, el mismo orden de filas y un entorno compatible. No valida las fechas como reales. La distribución uniforme es una regla del experimento, no una hipótesis contrastada sobre la llegada de tickets.
+
+#### Agregación diaria y comprobaciones
+
+```{python}
+serie_diaria_simulada = (
+    df_simulacion.set_index("fecha_simulada")
+    .resample("D")
+    .size()
+    .reindex(calendario_simulado, fill_value=0)
+)
+
+serie_diaria_simulada.index.name = "fecha_simulada"
+resumen_diario_simulado = serie_diaria_simulada.reset_index(
+    name="tickets_simulados"
+)
+
+if int(serie_diaria_simulada.sum()) != len(df):
+    raise ValueError("El recuento simulado no coincide con el total de filas.")
+
+if not df_simulacion["fecha_simulada"].between(
+    INICIO_SIMULACION, FIN_SIMULACION
+).all():
+    raise ValueError("Hay fechas simuladas fuera del calendario de prueba.")
+
+if "fecha_simulada" in df.columns or "fecha_simulada" in df_original.columns:
+    raise ValueError("La simulación ha alterado los datos de trabajo originales.")
+
+print("Comprobación correcta: cada fila se contabiliza una sola vez.")
+print("El CSV y los DataFrames originales conservan sus columnas.")
+resumen_diario_simulado.head(7)
+```
+
+Interpretación técnica: `set_index` establece el índice temporal, `resample("D")` agrupa por días y `size()` cuenta las filas asignadas a cada día. `reindex` incorpora todos los días del calendario de prueba; un cero significaría que no se asignó ninguna fila a ese día artificial. Las comprobaciones verifican el procedimiento, no el comportamiento de un sistema real.
+
+#### Gráfico interactivo de la simulación
+
+```{python}
+#| fig-cap: "SIMULACIÓN: tickets por día con fechas artificiales; no representa demanda observada"
+
+fig_simulacion = px.line(
+    resumen_diario_simulado,
+    x="fecha_simulada",
+    y="tickets_simulados",
+    template="plotly_white",
+    labels={
+        "fecha_simulada": "Fecha simulada (no observada)",
+        "tickets_simulados": "Tickets asignados en la simulación"
+    },
+    title="SIMULACIÓN: tickets por día (fechas artificiales)"
+)
+
+fig_simulacion.update_traces(
+    mode="lines+markers",
+    hovertemplate=(
+        "Fecha SIMULADA: %{x|%d/%m/%Y}"
+        "<br>Tickets asignados: %{y}"
+        "<extra>Datos temporales artificiales</extra>"
+    )
+)
+fig_simulacion.update_xaxes(
+    rangeslider_visible=True,
+    rangeselector=dict(buttons=[
+        dict(count=7, label="7 días", step="day", stepmode="backward"),
+        dict(count=1, label="1 mes", step="month", stepmode="backward"),
+        dict(label="Todo", step="all")
+    ])
+)
+fig_simulacion.update_yaxes(rangemode="tozero")
+fig_simulacion.update_layout(hovermode="x unified")
+fig_simulacion.show()
+```
+
+Interpretación técnica: el gráfico permite explorar la variación temporal de un escenario simulado, consultar valores y ampliar intervalos. Las oscilaciones dependen de la asignación pseudoaleatoria: no prueban sobrecarga, estacionalidad, mejoras del servicio ni incidentes ocurridos en esas fechas.
+
+Aplicación SysAdmin: este procedimiento puede probar un panel antes de disponer de fechas reales. Para tomar decisiones operativas habría que sustituir `fecha_simulada` por timestamps verificados y repetir el análisis. No se recomienda cambiar personal, guardias o infraestructura a partir de esta simulación.
 
 ## 5. Conclusiones
 
@@ -445,7 +562,8 @@ if not altos_por_idioma.empty:
 - `concat` reúne subconjuntos del mismo archivo, no fuentes independientes.
 - Las agrupaciones excluyen categorías ausentes salvo donde se indica lo contrario.
 - Si hay empates en los máximos, el texto automático muestra una de las categorías empatadas.
-- El análisis temporal sigue pendiente de verificar una fecha válida o acordar una alternativa.
+- La serie del apartado 4.5 utiliza fechas simuladas: demuestra el procedimiento técnico, no evolución temporal observada.
+- La aceptación académica de una simulación depende de la interpretación del docente; no se afirma que equivalga a disponer de timestamps originales.
 
 ## 6. Fuentes y metodología de trabajo
 
@@ -462,3 +580,8 @@ El código utiliza como referencia la documentación oficial y adapta las operac
 - [Etiquetas de barras en Matplotlib](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.bar_label.html).
 - [Plantillas de Plotly](https://plotly.com/python/templates/).
 - [Colores discretos de Plotly](https://plotly.com/python/discrete-color/).
+
+- [Generador pseudoaleatorio y semillas de NumPy](https://numpy.org/doc/stable/reference/random/generator.html).
+- [Series temporales con Pandas](https://pandas.pydata.org/docs/user_guide/timeseries.html).
+- [Series temporales con Plotly](https://plotly.com/python/time-series/).
+- [Selector de intervalos de Plotly](https://plotly.com/python/range-slider/).
