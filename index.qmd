@@ -1,29 +1,55 @@
 ---
 title: "Análisis de Tickets de Soporte IT"
 author: "Grupo J: Victor, Mercedes, Alejandro y Christopher"
-format: html
+lang: es
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-title: "Contenido"
+    code-copy: true
 execute:
   echo: true
-  warning: false
+  warning: true
 ---
 
 ## 1. Contexto y dataset
 
-Para este proyecto hemos utilizado un dataset público de Kaggle con tickets de soporte técnico. El objetivo es analizar la carga de trabajo de un helpdesk desde la perspectiva de un administrador de sistemas: qué departamentos reciben más incidencias, qué prioridades predominan y qué tickets deberían atenderse primero.
+### 1.1 Origen y justificación
 
-**Fuente:** [Customer IT Support - Ticket Dataset](https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets)
+Para este proyecto hemos seleccionado un dataset público de tickets de soporte. El objetivo es analizar el volumen de incidencias desde la perspectiva de un administrador de sistemas: qué departamentos reciben más tickets, qué prioridades predominan y qué registros conviene revisar primero.
 
-**Columnas principales:**
+**Fuente del dataset:** [Customer IT Support - Ticket Dataset, de Tobias Bueck](https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets).
 
-- `queue`: departamento o cola de soporte al que se asigna el ticket.
-- `priority`: prioridad del ticket.
-- `type`: tipo de incidencia, por ejemplo incidente, petición o problema.
-- `language`: idioma del ticket.
-- `subject`: asunto del correo o ticket.
+**Archivo utilizado:** `dataset-tickets-multi-lang-4-20k.csv`.
+
+El conjunto de datos contiene tickets generados sintéticamente y se distribuye bajo la licencia CC BY 4.0. Los resultados describen esta muestra y sirven como ejercicio de análisis; no demuestran la carga de trabajo real de una empresa.
+
+El dataset incluye departamentos técnicos y también otras áreas de atención al cliente. Por tanto, no todos los tickets representan fallos de infraestructura.
+
+### 1.2 Columnas principales
+
+| Columna | Significado | Utilidad para el análisis |
+|---|---|---|
+| `queue` | Departamento o cola asignada al ticket | Comparar el volumen de tickets entre equipos |
+| `priority` | Prioridad asignada | Identificar registros que requieren revisión preferente |
+| `type` | Tipo de ticket | Distinguir incidentes, solicitudes, problemas y cambios |
+| `language` | Idioma del ticket | Analizar necesidades lingüísticas |
+| `subject` | Asunto del ticket | Consultar ejemplos de incidencias |
+
+### 1.3 Preguntas del análisis
+
+1. ¿Cómo se distribuyen los tickets por prioridad?
+2. ¿Qué departamentos concentran más tickets y de qué tipo?
+3. ¿Cómo se relacionan la prioridad y el idioma?
+4. ¿Qué tickets combinan prioridad alta y tipo incidente?
+5. ¿Qué limitaciones tienen estos datos para tomar decisiones operativas?
 
 ## 2. Exploración inicial y limpieza
 
-En este apartado cargamos el dataset y comprobamos su estructura, tipos de datos, valores nulos y distribución de las variables más relevantes.
+### 2.1 Carga y estructura
+
+Importamos las librerías y cargamos el CSV. Conservamos una copia original para poder comparar los datos antes y después de las transformaciones.
 
 ```{python}
 import pandas as pd
@@ -31,190 +57,398 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 
-df = pd.read_csv("dataset-tickets-multi-lang-4-20k.csv")
+archivo = "dataset-tickets-multi-lang-4-20k.csv"
+df_original = pd.read_csv(archivo)
 
-print(f"El dataset tiene {df.shape} filas y {df.shape} columnas.")
+df = df_original.copy()
+
+columnas_necesarias = ["queue", "priority", "type", "language", "subject"]
+columnas_faltantes = [
+    columna for columna in columnas_necesarias
+    if columna not in df.columns
+]
+
+if columnas_faltantes:
+    raise ValueError(
+        f"Faltan columnas necesarias: {columnas_faltantes}"
+    )
+
+print(f"El dataset tiene {df.shape} filas y {df.shape} columnas.")[2]
+print("\nColumnas disponibles:")
+print(df.columns.tolist())
+
+print("\nInformación de estructura:")
 df.info()
 ```
+
+**Interpretación técnica:** esta inspección permite comprobar si existen las columnas necesarias y si sus tipos de datos son adecuados. Antes de automatizar un informe, un SysAdmin debe verificar la estructura del archivo para evitar errores provocados por cambios en el formato de exportación.
+
+### 2.2 Resumen descriptivo
 
 ```{python}
 df.describe(include="all")
 ```
 
-```{python}
-print("Distribución de prioridades:")
-print(df["priority"].value_counts())
+**Interpretación técnica:** el resumen permite revisar cuántos valores no nulos hay, cuántas categorías distintas aparecen y cuál es el valor más frecuente de cada variable. En columnas de texto, estas medidas son más útiles que una media numérica. Los asuntos más frecuentes no equivalen necesariamente a una misma causa raíz.
 
-print("\nDistribución por idioma:")
-print(df["language"].value_counts())
-
-print("\nDistribución por tipo de ticket:")
-print(df["type"].value_counts())
-```
+### 2.3 Detección de nulos y duplicados
 
 ```{python}
-print("Valores nulos por columna:")
-print(df.isnull().sum())
+auditoria_nulos = pd.DataFrame({
+    "nulos": df.isna().sum(),
+    "porcentaje_nulos": (df.isna().mean() * 100).round(2)
+})
 
-print("\nFilas duplicadas:")
-print(df.duplicated().sum())
+auditoria_nulos
 ```
 
-**Interpretación técnica:** con `info()` comprobamos el tipo de datos y la existencia de valores nulos. Con `describe()` obtenemos un resumen estadístico general y con `value_counts()` vemos qué categorías predominan. Si hubiera duplicados o nulos en columnas relevantes, un administrador debería limpiarlos antes de analizar los datos para no distorsionar las métricas de carga del helpdesk.
+**Interpretación técnica:** los nulos deben evaluarse según la función de cada columna. Un valor ausente en una etiqueta opcional no justifica eliminar todo el ticket. En cambio, la falta de prioridad o departamento limita las consultas que utilizan esas variables.
+
+```{python}
+duplicados_exactos = int(df.duplicated().sum())
+
+print(f"Filas completamente duplicadas: {duplicados_exactos}")
+```
+
+**Decisión de limpieza:** conservamos las filas duplicadas. Sin un identificador único o una fecha que permita distinguir eventos, dos filas iguales no demuestran por sí solas un error de exportación. El recuento se documenta como una limitación y no se eliminan registros automáticamente.
+
+### 2.4 Normalización de categorías
+
+Eliminamos espacios al principio y al final de las categorías y unificamos las mayúsculas y minúsculas. Las celdas vacías de estas columnas se representan como valores ausentes.
+
+```{python}
+columnas_categoricas = ["queue", "priority", "type", "language"]
+
+for columna in columnas_categoricas:
+    df[columna] = (
+        df[columna]
+        .astype("string")
+        .str.strip()
+        .replace("", pd.NA)
+    )
+
+df["priority"] = df["priority"].str.lower()
+df["language"] = df["language"].str.lower()
+df["type"] = df["type"].str.lower()
+
+for columna in columnas_categoricas:
+    cambios = (
+        df_original[columna]
+        .astype("string")
+        .fillna("<NULO>")
+        .ne(df[columna].fillna("<NULO>"))
+        .sum()
+    )
+    print(f"{columna}: {cambios} valores modificados")
+
+print(f"\nFilas conservadas tras la normalización: {len(df)}")
+```
+
+**Interpretación técnica:** la normalización evita separar categorías que solo se diferencian por espacios o por mayúsculas. No se alteran los asuntos ni el contenido de los tickets. Como el tipo se ha convertido a minúsculas, el filtro de incidentes utilizará el valor `incident`.
+
+### 2.5 Tres resúmenes estadísticos clave
+
+Calculamos frecuencias y porcentajes para prioridades, idiomas y tipos de ticket. Los valores ausentes se muestran por separado.
+
+```{python}
+def resumen_categorias(serie):
+    frecuencias = serie.value_counts(dropna=False)
+    return pd.DataFrame({
+        "tickets": frecuencias,
+        "porcentaje": (frecuencias / len(serie) * 100).round(2)
+    })
+```
+
+#### Resumen 1: prioridades
+
+```{python}
+resumen_prioridades = resumen_categorias(df["priority"])
+resumen_prioridades
+```
+
+**Interpretación técnica:** la distribución de prioridades permite estudiar el volumen de tickets que el sistema clasifica como urgentes. Una proporción elevada de prioridad alta justificaría revisar los criterios de clasificación y el proceso de triaje; no demuestra por sí sola una sobrecarga del equipo.
+
+#### Resumen 2: idiomas
+
+```{python}
+resumen_idiomas = resumen_categorias(df["language"])
+resumen_idiomas
+```
+
+**Interpretación técnica:** este resumen orienta sobre las competencias lingüísticas necesarias para atender la muestra. Para organizar guardias reales también harían falta horarios de llegada y disponibilidad del personal.
+
+#### Resumen 3: tipos de ticket
+
+```{python}
+resumen_tipos = resumen_categorias(df["type"])
+resumen_tipos
+```
+
+**Interpretación técnica:** distinguir incidentes, solicitudes, problemas y cambios ayuda a separar tareas reactivas de trabajo planificado. La acción posterior sería revisar las categorías con mayor volumen y comprobar si existen tareas repetitivas que puedan documentarse o automatizarse.
+
+### 2.6 Selección por posición con `iloc`
+
+```{python}
+df.iloc[:5, :7]
+```
+
+**Interpretación técnica:** `iloc` selecciona por posición. Aquí inspeccionamos las primeras cinco filas y las primeras siete columnas para comprobar visualmente la estructura. Esta muestra sirve para inspección, no representa por sí sola todo el dataset.
 
 ## 3. Análisis avanzado con Pandas
 
 ### 3.1 Agrupación con `groupby`
 
-Analizamos qué departamento recibe más tickets según el tipo de incidencia.
+Contamos los tickets de cada combinación de departamento y tipo.
 
 ```{python}
-carga_por_cola = df.groupby(["queue", "type"]).size().unstack(fill_value=0)
+carga_por_cola = (
+    df.groupby(["queue", "type"], dropna=False)
+    .size()
+    .unstack(fill_value=0)
+)
+
 carga_por_cola
 ```
 
-**Interpretación técnica:** el `groupby` agrupa los tickets por departamento y tipo. Después, `size()` cuenta cuántos tickets hay en cada grupo y `unstack()` convierte los tipos de ticket en columnas. Si un departamento concentra muchos incidentes, es un posible cuello de botella. Como acción, se podría reforzar ese equipo, redistribuir tickets o automatizar las consultas más repetitivas.
+**Interpretación técnica:** `groupby` forma grupos, `size()` cuenta sus filas y `unstack()` convierte los tipos en columnas. La tabla permite comparar el volumen registrado por departamento, pero no mide el esfuerzo de resolución de cada ticket.
+
+```{python}
+volumen_por_cola = df["queue"].value_counts()
+
+if not volumen_por_cola.empty:
+    cola_principal = volumen_por_cola.index
+    tickets_cola_principal = int(volumen_por_cola.iloc)
+    porcentaje_cola_principal = tickets_cola_principal / len(df) * 100
+
+    print(
+        f"El departamento con más tickets es {cola_principal}, "
+        f"con {tickets_cola_principal} registros "
+        f"({porcentaje_cola_principal:.2f}% del total)."
+    )
+else:
+    print("No hay departamentos informados para comparar.")
+```
+
+**Acción propuesta:** revisar los tipos de tickets del departamento con mayor volumen y estudiar si procede mejorar la documentación, la asignación o la automatización. Para afirmar que existe saturación serían necesarios datos de personal, tickets pendientes y tiempos de resolución.
 
 ### 3.2 Tabla dinámica con `pivot_table`
 
-Cruzamos la prioridad con el idioma para comprobar si los tickets urgentes se concentran en algún idioma.
+Cruzamos prioridad e idioma. Utilizamos una columna auxiliar con valor 1 para contar registros sin depender de que el asunto esté informado.
 
 ```{python}
+df_pivot = df.assign(numero_ticket=1)
+
 tabla_dinamica = pd.pivot_table(
-    df,
+    df_pivot,
     index="priority",
     columns="language",
-    values="subject",
-    aggfunc="count",
+    values="numero_ticket",
+    aggfunc="sum",
     fill_value=0
 )
 
 tabla_dinamica
 ```
 
-**Interpretación técnica:** la `pivot_table` resume el número de tickets cruzando dos variables categóricas: prioridad e idioma. Cada celda indica cuántos tickets existen para esa combinación. Si los tickets de prioridad alta están concentrados en un idioma, el equipo de guardia debe contar con personal capaz de atenderlos sin retrasos.
+**Interpretación técnica:** cada celda cuenta los tickets de una combinación de prioridad e idioma. Esta tabla utiliza los registros que tienen ambas categorías informadas. Un mayor número de tickets urgentes en un idioma puede reflejar que ese idioma también tiene más tickets en general.
+
+```{python}
+altos_por_idioma = (
+    df.loc[df["priority"].eq("high"), "language"]
+    .value_counts()
+)
+
+if not altos_por_idioma.empty:
+    print(
+        "El idioma con más tickets de prioridad alta es "
+        f"{altos_por_idioma.index}, "
+        f"con {int(altos_por_idioma.iloc)} tickets."
+    )
+else:
+    print("No hay tickets de prioridad alta con idioma informado.")
+```
+
+**Acción propuesta:** comprobar que el equipo dispone de capacidad para atender los idiomas con más tickets urgentes. La tabla no permite concluir que el idioma cause la prioridad ni que exista un retraso de resolución.
 
 ### 3.3 Filtrado avanzado con `loc`
 
-Aislamos los tickets más críticos: prioridad alta y tipo incidente.
+Seleccionamos los tickets con prioridad alta y tipo incidente. Mostramos únicamente las columnas relevantes para una primera revisión.
 
 ```{python}
+condicion_urgentes = (
+    df["priority"].eq("high") &
+    df["type"].eq("incident")
+).fillna(False)
+
 tickets_urgentes = df.loc[
-    (df["priority"] == "high") & (df["type"] == "Incident"),
+    condicion_urgentes,
     ["queue", "subject", "language"]
 ]
+
+print(f"Incidentes de prioridad alta: {len(tickets_urgentes)}")
+print(
+    "Porcentaje sobre el total: "
+    f"{len(tickets_urgentes) / len(df) * 100:.2f}%"
+)
 
 tickets_urgentes.head(10)
 ```
 
-**Interpretación técnica:** `loc` permite seleccionar filas que cumplen varias condiciones lógicas y, al mismo tiempo, elegir solo las columnas que nos interesan. Estos tickets representan los casos que un SysAdmin debería revisar primero al iniciar su turno, porque combinan alta urgencia con un incidente.
+**Interpretación técnica:** `loc` combina condiciones lógicas y selecciona columnas. El resultado constituye una lista inicial de revisión prioritaria. No es una alerta temprana ni sustituye al procedimiento de gestión de incidencias: un SysAdmin debería confirmar el impacto, el servicio afectado y los acuerdos de nivel de servicio.
 
-### 3.4 Combinación de datos con `concat`
+### 3.4 Combinación de subconjuntos con `concat`
 
-Aunque trabajamos con un único dataset, dividimos los tickets por idioma y los volvemos a unir para demostrar el uso de `concat`.
+Como demostración didáctica, seleccionamos tickets en inglés y alemán y los reunimos verticalmente.
 
 ```{python}
-df_ingles = df[df["language"] == "en"]
-df_aleman = df[df["language"] == "de"]
+df_ingles = df.loc[df["language"].eq("en")].copy()
+df_aleman = df.loc[df["language"].eq("de")].copy()
 
-df_combinado = pd.concat([df_ingles, df_aleman])
+df_combinado = pd.concat(
+    [df_ingles, df_aleman],
+    ignore_index=True
+)
 
 print(f"Tickets en inglés: {len(df_ingles)}")
 print(f"Tickets en alemán: {len(df_aleman)}")
 print(f"Tickets combinados: {len(df_combinado)}")
+print(f"Tickets del dataset completo: {len(df)}")
+print(
+    "Tickets no incluidos en esta combinación: "
+    f"{len(df) - len(df_combinado)}"
+)
 
 df_combinado.head()
 ```
 
-**Interpretación técnica:** `concat` une dos DataFrames verticalmente. En este caso separamos los tickets por idioma para poder analizarlos por partes y después los reunimos. Esta técnica sería útil si tuviéramos varios archivos de logs o tickets y quisiéramos construir un histórico único.
+**Interpretación técnica:** `concat` reúne las filas de ambos DataFrames e `ignore_index=True` genera un índice consecutivo. Esta operación no incorpora fuentes externas y solo incluye inglés y alemán. En un escenario real, la misma técnica permitiría reunir exportaciones de tickets con una estructura compatible.
 
 ## 4. Visualizaciones
 
-### 4.1 Gráfico estático: prioridad de los tickets
+### 4.1 Preparación de prioridades y colores
+
+Definimos una única paleta para mantener la coherencia entre los gráficos. Si existen prioridades distintas de `low`, `medium` y `high`, se incorporan sin ocultarlas.
 
 ```{python}
-#| fig-cap: "Distribución de tickets por nivel de prioridad"
+sns.set_theme(style="whitegrid")
 
-orden_prioridad = ["low", "medium", "high"]
-conteo = df["priority"].value_counts().reindex(orden_prioridad)
+prioridades_presentes = df["priority"].dropna().unique().tolist()
+orden_base = ["low", "medium", "high"]
 
-colores = {
+otras_prioridades = sorted(
+    prioridad for prioridad in prioridades_presentes
+    if prioridad not in orden_base
+)
+
+orden_prioridad = orden_base + otras_prioridades
+
+colores_prioridad = {
     "low": "#2ecc71",
     "medium": "#f39c12",
     "high": "#e74c3c"
 }
 
-plt.figure(figsize=(9, 4.5))
-sns.set_theme(style="whitegrid")
+for prioridad in otras_prioridades:
+    colores_prioridad[prioridad] = "#7f8c8d"
 
-ax = sns.barplot(
-    x=conteo.index,
-    y=conteo.values,
-    hue=conteo.index,
-    palette=colores,
-    legend=False
+print("Orden de prioridades:", orden_prioridad)
+print(
+    "Tickets sin prioridad, no representados en los gráficos: "
+    f"{df['priority'].isna().sum()}"
+)
+```
+
+**Criterio visual:** el color refuerza la comparación, pero las etiquetas y los ejes permiten leer los gráficos sin depender exclusivamente de él. Los valores ausentes se documentan y no se asignan arbitrariamente a una prioridad.
+
+### 4.2 Gráfico estático: tickets por prioridad
+
+```{python}
+#| fig-cap: "Distribución de tickets por nivel de prioridad"
+
+conteo = (
+    df["priority"]
+    .value_counts()
+    .reindex(orden_prioridad, fill_value=0)
 )
 
+fig_estatico, ax = plt.subplots(figsize=(9, 4.5))
+
+barras = ax.bar(
+    conteo.index,
+    conteo.values,
+    color=[colores_prioridad[p] for p in conteo.index]
+)
+
+ax.bar_label(barras, padding=3)
 ax.set_title(
     "Volumen de tickets por nivel de prioridad",
     fontsize=14,
     fontweight="bold",
     pad=15
 )
-ax.set_xlabel("Nivel de prioridad", fontsize=11)
-ax.set_ylabel("Número de tickets", fontsize=11)
+ax.set_xlabel("Nivel de prioridad")
+ax.set_ylabel("Número de tickets")
+ax.set_ylim(0, max(int(conteo.max()), 1) * 1.15)
+ax.grid(axis="x", visible=False)
 
-for contenedor in ax.containers:
-    ax.bar_label(contenedor, padding=3)
-
-sns.despine()
-plt.tight_layout()
+sns.despine(ax=ax)
+fig_estatico.tight_layout()
 plt.show()
 ```
 
-**Interpretación técnica:** este gráfico muestra cómo se reparte la carga según la urgencia. Si predominan los tickets de prioridad media o alta, el equipo necesita un sistema claro de triaje para atender primero las incidencias críticas.
+**Interpretación técnica:** la altura y las etiquetas permiten comparar el número de tickets por prioridad. El gráfico describe la clasificación de los tickets, no el tiempo dedicado a resolverlos. Como acción, revisaríamos si los criterios de prioridad se están aplicando correctamente antes de cambiar la dotación del equipo.
 
-### 4.2 Gráfico estático: mapa de calor
+### 4.3 Gráfico estático: carga por departamento y prioridad
 
 ```{python}
-#| fig-cap: "Carga total por departamento, desglosada por prioridad"
+#| fig-cap: "Volumen por departamento, desglosado por prioridad"
 
 df_apilado = (
     df.groupby(["queue", "priority"])
     .size()
     .unstack(fill_value=0)
-    .reindex(columns=["low", "medium", "high"])
+    .reindex(columns=orden_prioridad, fill_value=0)
 )
 
-colores = ["#2ecc71", "#f39c12", "#e74c3c"]
+orden_departamentos = df_apilado.sum(axis=1).sort_values().index
+df_apilado = df_apilado.loc[orden_departamentos]
 
-df_apilado.plot(
+ax = df_apilado.plot(
     kind="barh",
     stacked=True,
-    color=colores,
-    figsize=(10, 6),
+    color=[colores_prioridad[p] for p in df_apilado.columns],
+    figsize=(11, 7),
     width=0.8
 )
 
-plt.title(
-    "Carga total por departamento y prioridad",
+ax.set_title(
+    "Volumen de tickets por departamento y prioridad",
     fontsize=14,
     fontweight="bold",
     pad=15
 )
-plt.xlabel("Número de tickets")
-plt.ylabel("Departamento")
-plt.legend(title="Prioridad", bbox_to_anchor=(1.02, 1), loc="upper left")
+ax.set_xlabel("Número de tickets")
+ax.set_ylabel("Departamento")
+ax.legend(
+    title="Prioridad",
+    bbox_to_anchor=(1.02, 1),
+    loc="upper left"
+)
+ax.grid(axis="y", visible=False)
+
+sns.despine(ax=ax)
 plt.tight_layout()
 plt.show()
 ```
 
-**Interpretación técnica:** el mapa de calor facilita detectar de un vistazo qué combinación de departamento y tipo de ticket genera más trabajo. Las celdas más oscuras o rojas indican mayor carga operativa y, por tanto, posibles áreas donde aplicar automatización o más personal.
+**Interpretación técnica:** cada barra representa el total de tickets de un departamento con prioridad informada. Los segmentos muestran la composición de ese volumen. El orden facilita identificar los departamentos con más registros. Una barra larga no demuestra saturación: deben contrastarse el volumen, la complejidad, el personal disponible y los tiempos de resolución.
 
-### 4.3 Gráfico interactivo con Plotly
+**Acción propuesta:** examinar las categorías del departamento con mayor volumen y valorar mejoras de documentación, enrutamiento o automatización. No se recomienda aumentar personal únicamente por el número de registros.
+
+### 4.4 Gráfico interactivo con Plotly
 
 ```{python}
-#| fig-cap: "Carga interactiva por departamento y prioridad"
+#| fig-cap: "Comparación interactiva de tickets por departamento y prioridad"
 
 df_plotly = (
     df.groupby(["queue", "priority"])
@@ -229,43 +463,109 @@ fig = px.bar(
     color="priority",
     barmode="group",
     template="plotly_white",
-    category_orders={"priority": ["low", "medium", "high"]},
-    color_discrete_map={
-        "low": "#2ecc71",
-        "medium": "#f39c12",
-        "high": "#e74c3c"
+    category_orders={"priority": orden_prioridad},
+    color_discrete_map=colores_prioridad,
+    labels={
+        "queue": "Departamento",
+        "cantidad": "Número de tickets",
+        "priority": "Prioridad"
     },
-    title="<b>Distribución interactiva de carga por departamento y prioridad</b>"
+    title="Tickets por departamento y prioridad"
 )
 
 fig.update_layout(
-    xaxis_title="Departamento",
-    yaxis_title="Número de tickets",
-    legend_title="Prioridad",
     font=dict(family="Arial", size=12),
-    hovermode="x unified"
+    hovermode="x unified",
+    xaxis_tickangle=-35,
+    margin=dict(b=130)
 )
 
 fig.show()
 ```
 
-**Interpretación técnica:** este gráfico interactivo permite comparar la carga de cada departamento según la prioridad. Al ser interactivo, se pueden ocultar categorías, ver valores exactos al pasar el ratón y analizar mejor qué equipos necesitan refuerzo.
+**Interpretación técnica:** al pasar el ratón se consultan los valores exactos y la leyenda permite ocultar categorías. Este gráfico complementa las barras apiladas: facilita comparar prioridades individuales entre departamentos, en lugar de centrarse solo en el volumen total.
+
+**Acción propuesta:** utilizar la interacción para examinar los tickets de prioridad alta por departamento y seleccionar áreas que requieran una revisión más detallada.
+
+### 4.5 Limitación del requisito temporal
+
+El gráfico interactivo anterior compara categorías, pero no representa evolución temporal.
+
+Antes de completar este requisito debe verificarse si el archivo contiene una fecha de creación de ticket válida. La lista de columnas se muestra en el apartado 2.1.
+
+No se utilizará el orden de las filas ni una columna de versión como sustituto de una fecha. Si no hay una variable temporal adecuada, será necesario incorporar datos con fechas o consultar al profesor si acepta esta alternativa categórica.
+
+Por tanto, el requisito de evolución temporal queda pendiente de resolver y no se considera cumplido únicamente por disponer de un gráfico interactivo.
 
 ## 5. Conclusiones
 
-1.  **Carga operativa:** el análisis con `groupby` permite identificar el departamento con más tickets e incidentes. Ese sería el principal candidato para recibir más recursos o automatización.
+### 5.1 Resultados calculados
 
-2.  **Priorización:** el filtrado con `loc` permite crear una lista de tickets críticos que deberían atenderse primero en cada turno.
+```{python}
+print(f"Registros analizados: {len(df)}")
 
-3.  **Idiomas y guardias:** la `pivot_table` muestra la relación entre prioridad e idioma. Si hay muchos tickets urgentes en inglés, el personal de guardia debería tener un nivel adecuado de ese idioma.
+if not volumen_por_cola.empty:
+    print(
+        f"Departamento con mayor volumen: {volumen_por_cola.index} "
+        f"({int(volumen_por_cola.iloc)} tickets)."
+    )
 
-4.  **Automatización:** los tickets repetitivos y de baja prioridad podrían resolverse con respuestas automáticas, base de conocimiento o chatbots, reduciendo la carga del soporte técnico.
+prioridades_validas = df["priority"].value_counts()
 
-5.  **Monitorización:** este tipo de análisis puede convertirse en un panel de control periódico para detectar aumentos anómalos de incidencias y actuar antes de que afecten al servicio.
+if not prioridades_validas.empty:
+    print(
+        f"Prioridad más frecuente: {prioridades_validas.index} "
+        f"({int(prioridades_validas.iloc)} tickets)."
+    )
 
-## Referencias técnicas
+print(
+    "Incidentes de prioridad alta seleccionados para revisión: "
+    f"{len(tickets_urgentes)}."
+)
 
-- Pandas User Guide: https://pandas.pydata.org/docs/user_guide/
-- Seaborn: `set_theme()`, `barplot()` y `heatmap()`: https://seaborn.pydata.org/
-- Plotly Python: plantillas y colores discretos: https://plotly.com/python/templates/ y https://plotly.com/python/discrete-color/
-- Matplotlib: ajuste de márgenes con `tight_layout()`: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html
+if not altos_por_idioma.empty:
+    print(
+        "Idioma con más tickets de prioridad alta: "
+        f"{altos_por_idioma.index} "
+        f"({int(altos_por_idioma.iloc)} tickets)."
+    )
+```
+
+### 5.2 Propuestas desde la administración de sistemas
+
+1. **Distribución del volumen:** revisar los departamentos que concentran más registros y estudiar sus categorías antes de decidir cambios de recursos.
+
+2. **Priorización:** utilizar el filtro de incidentes de prioridad alta como apoyo al triaje, verificando el impacto y los servicios afectados.
+
+3. **Atención por idioma:** comprobar que existen competencias lingüísticas suficientes para los idiomas que concentran más tickets urgentes.
+
+4. **Automatización:** analizar los asuntos y categorías repetitivas antes de proponer respuestas automáticas o una base de conocimiento. El recuento por departamento no demuestra por sí solo qué tareas son automatizables.
+
+5. **Calidad de datos:** normalizar categorías, documentar nulos y evaluar los duplicados antes de construir indicadores operativos.
+
+### 5.3 Limitaciones
+
+- Los datos son sintéticos y no prueban el comportamiento de una empresa real.
+- El número de tickets no mide su complejidad ni el esfuerzo de resolución.
+- Sin datos de personal y tiempos no puede demostrarse una saturación.
+- La demostración de `concat` reúne subconjuntos del mismo archivo, no fuentes independientes.
+- Las tablas que agrupan por categorías excluyen registros sin esas categorías, salvo donde se indica expresamente lo contrario.
+- El análisis temporal permanece pendiente hasta verificar una columna de fecha válida o acordar una alternativa con el profesor.
+
+## 6. Fuentes y metodología de trabajo
+
+El código se ha elaborado tomando como referencia la documentación oficial de las librerías y adaptando las operaciones al dataset seleccionado.
+
+La personalización visual utiliza colores coherentes, etiquetas numéricas, ordenación de categorías y una plantilla clara. Estas decisiones buscan facilitar la interpretación, no modificar los resultados.
+
+### Fuentes consultadas
+
+- [Dataset de Tobias Bueck en Kaggle](https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets).
+- [Guía de usuario de Pandas](https://pandas.pydata.org/docs/user_guide/).
+- [Agrupaciones con Pandas](https://pandas.pydata.org/docs/user_guide/groupby.html).
+- [Selección e indexación con Pandas](https://pandas.pydata.org/docs/user_guide/indexing.html).
+- [Combinación de datos con Pandas](https://pandas.pydata.org/docs/user_guide/merging.html).
+- [Control de la estética en Seaborn](https://seaborn.pydata.org/tutorial/aesthetics.html).
+- [Etiquetas de barras en Matplotlib](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.bar_label.html).
+- [Plantillas de Plotly](https://plotly.com/python/templates/).
+- [Colores discretos en Plotly](https://plotly.com/python/discrete-color/).
