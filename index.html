@@ -126,7 +126,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
   <li><a href="#gráfico-estático-tickets-por-prioridad" id="toc-gráfico-estático-tickets-por-prioridad" class="nav-link" data-scroll-target="#gráfico-estático-tickets-por-prioridad">4.2 Gráfico estático: tickets por prioridad</a></li>
   <li><a href="#gráfico-estático-carga-por-departamento-y-prioridad" id="toc-gráfico-estático-carga-por-departamento-y-prioridad" class="nav-link" data-scroll-target="#gráfico-estático-carga-por-departamento-y-prioridad">4.3 Gráfico estático: carga por departamento y prioridad</a></li>
   <li><a href="#gráfico-interactivo-con-plotly" id="toc-gráfico-interactivo-con-plotly" class="nav-link" data-scroll-target="#gráfico-interactivo-con-plotly">4.4 Gráfico interactivo con Plotly</a></li>
-  <li><a href="#limitación-del-requisito-temporal" id="toc-limitación-del-requisito-temporal" class="nav-link" data-scroll-target="#limitación-del-requisito-temporal">4.5 Limitación del requisito temporal</a></li>
+  <li><a href="#serie-temporal-simulada-demostración-técnica" id="toc-serie-temporal-simulada-demostración-técnica" class="nav-link" data-scroll-target="#serie-temporal-simulada-demostración-técnica">4.5 Serie temporal simulada: demostración técnica</a></li>
   </ul></li>
   <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones">5. Conclusiones</a>
   <ul class="collapse">
@@ -177,6 +177,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 <p>Archivo utilizado: <code>dataset-tickets-multi-lang-4-20k.csv</code>.</p>
 <p>El dataset contiene tickets generados sintéticamente y se distribuye bajo la licencia CC BY 4.0. Los resultados describen esta muestra y sirven como ejercicio de análisis; no demuestran la carga de trabajo real de una empresa.</p>
 <p>Incluye departamentos técnicos y otras áreas de atención al cliente. Por tanto, no todos los tickets representan fallos de infraestructura.</p>
+<p>Para demostrar el tratamiento temporal sin modificar el dataset, el apartado 4.5 incorpora un escenario de prueba con fechas artificiales. Este escenario se mantiene separado de las conclusiones descriptivas del CSV.</p>
 </section>
 <section id="columnas-principales" class="level3">
 <h3 class="anchored" data-anchor-id="columnas-principales">1.2 Columnas principales</h3>
@@ -229,6 +230,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 <li>¿Qué departamentos concentran más tickets y de qué tipo?</li>
 <li>¿Cómo se relacionan prioridad e idioma?</li>
 <li>¿Qué tickets combinan prioridad alta y tipo incidente?</li>
+<li>¿Cómo se construye y explora una serie temporal de prueba con fechas explícitamente simuladas?</li>
 <li>¿Qué limitaciones tienen estos datos para tomar decisiones operativas?</li>
 </ol>
 </section>
@@ -238,7 +240,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 <section id="carga-y-estructura" class="level3">
 <h3 class="anchored" data-anchor-id="carga-y-estructura">2.1 Carga y estructura</h3>
 <p>Conservamos una copia original para comparar los datos antes y después de las transformaciones.</p>
-<div id="9599d36d" class="cell" data-execution_count="1">
+<div id="8380cbc9" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
@@ -292,9 +294,9 @@ memory usage: 2.3 MB</code></pre>
 </section>
 <section id="resumen-descriptivo" class="level3">
 <h3 class="anchored" data-anchor-id="resumen-descriptivo">2.2 Resumen descriptivo</h3>
-<div id="1c37bc14" class="cell" data-execution_count="2">
+<div id="854fc1c5" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe(include<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -402,13 +404,13 @@ memory usage: 2.3 MB</code></pre>
 </section>
 <section id="detección-de-nulos-y-duplicados" class="level3">
 <h3 class="anchored" data-anchor-id="detección-de-nulos-y-duplicados">2.3 Detección de nulos y duplicados</h3>
-<div id="4d103e6d" class="cell" data-execution_count="3">
+<div id="1158a514" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auditoria_nulos <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nulos"</span>: df.isna().<span class="bu">sum</span>(),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"porcentaje_nulos"</span>: (df.isna().mean() <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>auditoria_nulos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -503,7 +505,7 @@ memory usage: 2.3 MB</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: un nulo en una etiqueta opcional no justifica borrar todo el ticket. La ausencia de prioridad o departamento sí limita los análisis que utilizan esas variables.</p>
-<div id="b29978d3" class="cell" data-execution_count="4">
+<div id="a52711e3" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>duplicados_exactos <span class="op">=</span> <span class="bu">int</span>(df.duplicated().<span class="bu">sum</span>())</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Filas completamente duplicadas: </span><span class="sc">{</span>duplicados_exactos<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -515,7 +517,7 @@ memory usage: 2.3 MB</code></pre>
 <section id="normalización-de-categorías" class="level3">
 <h3 class="anchored" data-anchor-id="normalización-de-categorías">2.4 Normalización de categorías</h3>
 <p>Eliminamos espacios al principio y al final y normalizamos mayúsculas y minúsculas. Las categorías vacías pasan a ser valores ausentes.</p>
-<div id="ab699a19" class="cell" data-execution_count="5">
+<div id="92eee757" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>columnas_categoricas <span class="op">=</span> [<span class="st">"queue"</span>, <span class="st">"priority"</span>, <span class="st">"type"</span>, <span class="st">"language"</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> columna <span class="kw">in</span> columnas_categoricas:</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    df[columna] <span class="op">=</span> df[columna].astype(<span class="st">"string"</span>).<span class="bu">str</span>.strip().replace(<span class="st">""</span>, pd.NA)</span>
@@ -544,7 +546,7 @@ Filas conservadas: 20000</code></pre>
 <section id="tres-resúmenes-estadísticos-clave" class="level3">
 <h3 class="anchored" data-anchor-id="tres-resúmenes-estadísticos-clave">2.5 Tres resúmenes estadísticos clave</h3>
 <p>Los porcentajes se calculan sobre el total de filas, incluyendo los valores ausentes en el resumen.</p>
-<div id="4089e4dc" class="cell" data-execution_count="6">
+<div id="39b70ab3" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen_categorias(serie):</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    frecuencias <span class="op">=</span> serie.value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({</span>
@@ -554,10 +556,10 @@ Filas conservadas: 20000</code></pre>
 </div>
 <section id="resumen-1-prioridades" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-1-prioridades">Resumen 1: prioridades</h4>
-<div id="705be351" class="cell" data-execution_count="7">
+<div id="cd5fa3e0" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>resumen_prioridades <span class="op">=</span> resumen_categorias(df[<span class="st">"priority"</span>])</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>resumen_prioridades</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <div>
 
 
@@ -600,10 +602,10 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="resumen-2-idiomas" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-2-idiomas">Resumen 2: idiomas</h4>
-<div id="71cdfcd8" class="cell" data-execution_count="8">
+<div id="9690afd7" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>resumen_idiomas <span class="op">=</span> resumen_categorias(df[<span class="st">"language"</span>])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>resumen_idiomas</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -641,10 +643,10 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="resumen-3-tipos-de-ticket" class="level4">
 <h4 class="anchored" data-anchor-id="resumen-3-tipos-de-ticket">Resumen 3: tipos de ticket</h4>
-<div id="a0bb6a17" class="cell" data-execution_count="9">
+<div id="fa2f54f2" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>resumen_tipos <span class="op">=</span> resumen_categorias(df[<span class="st">"type"</span>])</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>resumen_tipos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -693,9 +695,9 @@ Filas conservadas: 20000</code></pre>
 </section>
 <section id="selección-por-posición-con-iloc" class="level3">
 <h3 class="anchored" data-anchor-id="selección-por-posición-con-iloc">2.6 Selección por posición con <code>iloc</code></h3>
-<div id="aa2cca89" class="cell" data-execution_count="10">
+<div id="e743b9fb" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>, :<span class="dv">7</span>]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 
 
@@ -777,14 +779,14 @@ Filas conservadas: 20000</code></pre>
 <section id="agrupación-con-groupby" class="level3">
 <h3 class="anchored" data-anchor-id="agrupación-con-groupby">3.1 Agrupación con <code>groupby</code></h3>
 <p>Contamos los tickets de cada combinación de departamento y tipo.</p>
-<div id="e7264a0d" class="cell" data-execution_count="11">
+<div id="26bf16f7" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>carga_por_cola <span class="op">=</span> (</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"type"</span>], dropna<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>carga_por_cola</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -883,7 +885,7 @@ Filas conservadas: 20000</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: <code>groupby</code> forma grupos, <code>size()</code> cuenta filas y <code>unstack()</code> convierte tipos en columnas. Incluimos grupos con categorías ausentes. La tabla mide volumen, no esfuerzo de resolución.</p>
-<div id="8173648b" class="cell" data-execution_count="12">
+<div id="c772cf1b" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>volumen_por_cola <span class="op">=</span> df[<span class="st">"queue"</span>].value_counts()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    cola_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
@@ -905,7 +907,7 @@ Filas conservadas: 20000</code></pre>
 <section id="tabla-dinámica-con-pivot_table" class="level3">
 <h3 class="anchored" data-anchor-id="tabla-dinámica-con-pivot_table">3.2 Tabla dinámica con <code>pivot_table</code></h3>
 <p>Utilizamos una columna auxiliar de valor 1 para contar registros sin depender de que el asunto esté informado.</p>
-<div id="d94ae459" class="cell" data-execution_count="13">
+<div id="555847db" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_pivot <span class="op">=</span> df.assign(numero_ticket<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tabla_dinamica <span class="op">=</span> pd.pivot_table(</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    df_pivot,</span>
@@ -916,7 +918,7 @@ Filas conservadas: 20000</code></pre>
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    fill_value<span class="op">=</span><span class="dv">0</span></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>tabla_dinamica</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -956,7 +958,7 @@ Filas conservadas: 20000</code></pre>
 </div>
 </div>
 <p>Interpretación técnica: cada celda cuenta tickets por prioridad e idioma, excluyendo registros sin alguna de estas categorías. Un idioma con más tickets urgentes también puede tener más tickets en general; no debe confundirse volumen con proporción de urgencia.</p>
-<div id="c6784bb5" class="cell" data-execution_count="14">
+<div id="5e152ccf" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>altos_por_idioma <span class="op">=</span> (</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    df.loc[df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>).fillna(<span class="va">False</span>), <span class="st">"language"</span>]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    .value_counts()</span>
@@ -979,7 +981,7 @@ Filas conservadas: 20000</code></pre>
 <section id="filtrado-avanzado-con-loc" class="level3">
 <h3 class="anchored" data-anchor-id="filtrado-avanzado-con-loc">3.3 Filtrado avanzado con <code>loc</code></h3>
 <p>Seleccionamos prioridad alta y tipo incidente, mostrando las columnas relevantes para una primera revisión.</p>
-<div id="07e38f40" class="cell" data-execution_count="15">
+<div id="35439f37" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>condicion_urgentes <span class="op">=</span> (</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>) <span class="op">&amp;</span> df[<span class="st">"type"</span>].eq(<span class="st">"incident"</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>).fillna(<span class="va">False</span>)</span>
@@ -995,7 +997,7 @@ Filas conservadas: 20000</code></pre>
 <pre><code>Incidentes de prioridad alta: 3526
 Porcentaje sobre el total: 17.63%</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
@@ -1080,7 +1082,7 @@ Porcentaje sobre el total: 17.63%</code></pre>
 <section id="combinación-de-subconjuntos-con-concat" class="level3">
 <h3 class="anchored" data-anchor-id="combinación-de-subconjuntos-con-concat">3.4 Combinación de subconjuntos con <code>concat</code></h3>
 <p>Como demostración didáctica, reunimos tickets en inglés y alemán.</p>
-<div id="b8892fe9" class="cell" data-execution_count="16">
+<div id="5bc4e462" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_ingles <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"en"</span>).fillna(<span class="va">False</span>)].copy()</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df_aleman <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"de"</span>).fillna(<span class="va">False</span>)].copy()</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>df_combinado <span class="op">=</span> pd.concat([df_ingles, df_aleman], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
@@ -1098,7 +1100,7 @@ Tickets combinados: 20000
 Tickets del dataset completo: 20000
 Tickets no incluidos: 0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -1227,7 +1229,7 @@ Tickets no incluidos: 0</code></pre>
 <h2 class="anchored" data-anchor-id="visualizaciones">4. Visualizaciones</h2>
 <section id="preparación-de-prioridades-y-colores" class="level3">
 <h3 class="anchored" data-anchor-id="preparación-de-prioridades-y-colores">4.1 Preparación de prioridades y colores</h3>
-<div id="b6abcb5b" class="cell" data-execution_count="17">
+<div id="c1df06ca" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>prioridades_presentes <span class="op">=</span> df[<span class="st">"priority"</span>].dropna().unique().tolist()</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>orden_base <span class="op">=</span> [<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>]</span>
@@ -1253,7 +1255,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-estático-tickets-por-prioridad" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-estático-tickets-por-prioridad">4.2 Gráfico estático: tickets por prioridad</h3>
-<div id="d84e048f" class="cell" data-execution_count="18">
+<div id="dab44322" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conteo <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts().reindex(orden_prioridad, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fig_estatico, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">4.5</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>barras <span class="op">=</span> ax.bar(</span>
@@ -1282,7 +1284,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-estático-carga-por-departamento-y-prioridad" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-estático-carga-por-departamento-y-prioridad">4.3 Gráfico estático: carga por departamento y prioridad</h3>
-<div id="4d81ed9f" class="cell" data-execution_count="19">
+<div id="78342254" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_apilado <span class="op">=</span> (</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
@@ -1320,7 +1322,7 @@ Tickets sin departamento: 0</code></pre>
 </section>
 <section id="gráfico-interactivo-con-plotly" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-interactivo-con-plotly">4.4 Gráfico interactivo con Plotly</h3>
-<div id="0bf2dbc0" class="cell" data-execution_count="20">
+<div id="52100822" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_plotly <span class="op">=</span> (</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    .reset_index(name<span class="op">=</span><span class="st">"cantidad"</span>)</span>
@@ -1344,9 +1346,9 @@ Tickets sin departamento: 0</code></pre>
 <span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    fig.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="6aa9727c-78e6-43eb-9457-8c3b8aea97e0" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("6aa9727c-78e6-43eb-9457-8c3b8aea97e0")) {                    Plotly.newPlot(                        "6aa9727c-78e6-43eb-9457-8c3b8aea97e0",                        [{"alignmentgroup":"True","hovertemplate":"Prioridad=low\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=medium\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=high\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"},"tickangle":-35},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"Tickets por departamento y prioridad"},"barmode":"group","font":{"family":"Arial","size":12},"margin":{"b":130},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="2d22192c-ca60-4542-85a0-08f61d9a6aa8" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("2d22192c-ca60-4542-85a0-08f61d9a6aa8")) {                    Plotly.newPlot(                        "2d22192c-ca60-4542-85a0-08f61d9a6aa8",                        [{"alignmentgroup":"True","hovertemplate":"Prioridad=low\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=medium\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=high\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"},"tickangle":-35},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"Tickets por departamento y prioridad"},"barmode":"group","font":{"family":"Arial","size":12},"margin":{"b":130},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('6aa9727c-78e6-43eb-9457-8c3b8aea97e0');
+var gd = document.getElementById('2d22192c-ca60-4542-85a0-08f61d9a6aa8');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -1375,35 +1377,379 @@ if (outputEl) {{
 <p>Interpretación técnica: el ratón permite consultar valores exactos y la leyenda permite ocultar categorías. Complementa las barras apiladas al facilitar comparaciones de prioridades individuales entre departamentos.</p>
 <p>Acción propuesta: examinar los tickets de prioridad alta por departamento y seleccionar áreas que necesiten revisión detallada.</p>
 </section>
-<section id="limitación-del-requisito-temporal" class="level3">
-<h3 class="anchored" data-anchor-id="limitación-del-requisito-temporal">4.5 Limitación del requisito temporal</h3>
-<p>El gráfico interactivo compara categorías, pero no representa evolución temporal. La lista de columnas se muestra en el apartado 2.1 y debe revisarse para comprobar si existe una fecha de creación válida.</p>
-<p>No se utilizarán el orden de filas ni una columna de versión como sustitutos de fechas. Si no existe una variable temporal adecuada, será necesario incorporar datos con fechas o consultar al profesor si acepta esta alternativa categórica.</p>
-<p>El requisito temporal queda pendiente: no se considera cumplido únicamente por disponer de un gráfico interactivo.</p>
+<section id="serie-temporal-simulada-demostración-técnica" class="level3">
+<h3 class="anchored" data-anchor-id="serie-temporal-simulada-demostración-técnica">4.5 Serie temporal simulada: demostración técnica</h3>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>SIMULACIÓN: fechas artificiales, no observadas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El CSV original no incluye una columna de fecha de apertura. En este apartado se asignan fechas artificiales únicamente para demostrar una agregación temporal con Pandas y un gráfico interactivo con Plotly. No se reconstruye la historia de los tickets ni se estudia demanda real. La simulación no garantiza por sí sola la aceptación académica de un requisito que pudiera exigir fechas originales.</p>
+</div>
+</div>
+<section id="método-de-simulación" class="level4">
+<h4 class="anchored" data-anchor-id="método-de-simulación">Método de simulación</h4>
+<p>El intervalo del 1 de enero al 31 de marzo de 2026 se elige arbitrariamente como calendario de prueba; no procede de la fuente. Cada fila recibe al azar un día de ese intervalo, con la misma probabilidad para todos los días. No se utilizan el índice de la fila, el texto de los tickets ni su prioridad para inferir fechas. No se incorporan patrones de fines de semana, picos ni estacionalidad.</p>
+<p>Creamos <code>df_simulacion</code> como copia independiente. El CSV, <code>df_original</code> y <code>df</code> permanecen intactos. La columna se llama <code>fecha_simulada</code> para distinguirla de cualquier fecha observada.</p>
+<div id="ad5fb05f" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>SEMILLA_SIMULACION <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>INICIO_SIMULACION <span class="op">=</span> pd.Timestamp(<span class="st">"2026-01-01"</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>FIN_SIMULACION <span class="op">=</span> pd.Timestamp(<span class="st">"2026-03-31"</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>calendario_simulado <span class="op">=</span> pd.date_range(</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    INICIO_SIMULACION, FIN_SIMULACION, freq<span class="op">=</span><span class="st">"D"</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>rng_simulacion <span class="op">=</span> np.random.default_rng(SEMILLA_SIMULACION)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>desplazamientos_simulados <span class="op">=</span> rng_simulacion.integers(</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    low<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    high<span class="op">=</span><span class="bu">len</span>(calendario_simulado),</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span><span class="bu">len</span>(df)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>df_simulacion <span class="op">=</span> df.copy()</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>df_simulacion[<span class="st">"fecha_simulada"</span>] <span class="op">=</span> (</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    INICIO_SIMULACION</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> pd.to_timedelta(desplazamientos_simulados, unit<span class="op">=</span><span class="st">"D"</span>)</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SIMULACIÓN TÉCNICA: fechas artificiales, no procedentes del CSV."</span>)</span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Semilla utilizada: </span><span class="sc">{</span>SEMILLA_SIMULACION<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Filas con fecha simulada: </span><span class="sc">{</span><span class="bu">len</span>(df_simulacion)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Días del calendario de prueba: </span><span class="sc">{</span><span class="bu">len</span>(calendario_simulado)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>df_simulacion.loc[</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    :, [<span class="st">"queue"</span>, <span class="st">"priority"</span>, <span class="st">"type"</span>, <span class="st">"fecha_simulada"</span>]</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>].head(<span class="dv">5</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SIMULACIÓN TÉCNICA: fechas artificiales, no procedentes del CSV.
+Semilla utilizada: 42
+Filas con fecha simulada: 20000
+Días del calendario de prueba: 90</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">queue</th>
+<th data-quarto-table-cell-role="th">priority</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">fecha_simulada</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>General Inquiry</td>
+<td>low</td>
+<td>incident</td>
+<td>2026-01-09</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Customer Service</td>
+<td>medium</td>
+<td>request</td>
+<td>2026-03-11</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Customer Service</td>
+<td>medium</td>
+<td>request</td>
+<td>2026-02-28</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Customer Service</td>
+<td>high</td>
+<td>incident</td>
+<td>2026-02-09</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Customer Service</td>
+<td>medium</td>
+<td>request</td>
+<td>2026-02-08</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: la semilla fija permite repetir la asignación con los mismos datos, el mismo orden de filas y un entorno compatible. No valida las fechas como reales. La distribución uniforme es una regla del experimento, no una hipótesis contrastada sobre la llegada de tickets.</p>
+</section>
+<section id="agregación-diaria-y-comprobaciones" class="level4">
+<h4 class="anchored" data-anchor-id="agregación-diaria-y-comprobaciones">Agregación diaria y comprobaciones</h4>
+<div id="a8f3d85c" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>serie_diaria_simulada <span class="op">=</span> (</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    df_simulacion.set_index(<span class="st">"fecha_simulada"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    .resample(<span class="st">"D"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    .size()</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    .reindex(calendario_simulado, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>serie_diaria_simulada.index.name <span class="op">=</span> <span class="st">"fecha_simulada"</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>resumen_diario_simulado <span class="op">=</span> serie_diaria_simulada.reset_index(</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">"tickets_simulados"</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">int</span>(serie_diaria_simulada.<span class="bu">sum</span>()) <span class="op">!=</span> <span class="bu">len</span>(df):</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"El recuento simulado no coincide con el total de filas."</span>)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> df_simulacion[<span class="st">"fecha_simulada"</span>].between(</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>    INICIO_SIMULACION, FIN_SIMULACION</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>).<span class="bu">all</span>():</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Hay fechas simuladas fuera del calendario de prueba."</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"fecha_simulada"</span> <span class="kw">in</span> df.columns <span class="kw">or</span> <span class="st">"fecha_simulada"</span> <span class="kw">in</span> df_original.columns:</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"La simulación ha alterado los datos de trabajo originales."</span>)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Comprobación correcta: cada fila se contabiliza una sola vez."</span>)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"El CSV y los DataFrames originales conservan sus columnas."</span>)</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>resumen_diario_simulado.head(<span class="dv">7</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Comprobación correcta: cada fila se contabiliza una sola vez.
+El CSV y los DataFrames originales conservan sus columnas.</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">fecha_simulada</th>
+<th data-quarto-table-cell-role="th">tickets_simulados</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2026-01-01</td>
+<td>224</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2026-01-02</td>
+<td>222</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2026-01-03</td>
+<td>240</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2026-01-04</td>
+<td>244</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2026-01-05</td>
+<td>221</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>2026-01-06</td>
+<td>209</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>2026-01-07</td>
+<td>225</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: <code>set_index</code> establece el índice temporal, <code>resample("D")</code> agrupa por días y <code>size()</code> cuenta las filas asignadas a cada día. <code>reindex</code> incorpora todos los días del calendario de prueba; un cero significaría que no se asignó ninguna fila a ese día artificial. Las comprobaciones verifican el procedimiento, no el comportamiento de un sistema real.</p>
+</section>
+<section id="gráfico-interactivo-de-la-simulación" class="level4">
+<h4 class="anchored" data-anchor-id="gráfico-interactivo-de-la-simulación">Gráfico interactivo de la simulación</h4>
+<div id="55f64bac" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig_simulacion <span class="op">=</span> px.line(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    resumen_diario_simulado,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"fecha_simulada"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"tickets_simulados"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"plotly_white"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    labels<span class="op">=</span>{</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"fecha_simulada"</span>: <span class="st">"Fecha simulada (no observada)"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tickets_simulados"</span>: <span class="st">"Tickets asignados en la simulación"</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"SIMULACIÓN: tickets por día (fechas artificiales)"</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_traces(</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    mode<span class="op">=</span><span class="st">"lines+markers"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span>(</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Fecha SIMULADA: %{x|</span><span class="sc">%d</span><span class="st">/%m/%Y}"</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"&lt;br&gt;Tickets asignados: %</span><span class="sc">{y}</span><span class="st">"</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"&lt;extra&gt;Datos temporales artificiales&lt;/extra&gt;"</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_xaxes(</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>    title_text<span class="op">=</span><span class="st">"Fecha simulada"</span>,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    tickformat<span class="op">=</span><span class="st">"</span><span class="sc">%d</span><span class="st">/%m/%Y"</span>,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    automargin<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    rangeslider_visible<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    rangeslider_thickness<span class="op">=</span><span class="fl">0.12</span>,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    rangeselector<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>        xanchor<span class="op">=</span><span class="st">"left"</span>,</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">1.07</span>,</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>        yanchor<span class="op">=</span><span class="st">"bottom"</span>,</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>        buttons<span class="op">=</span>[</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>            <span class="bu">dict</span>(</span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>                count<span class="op">=</span><span class="dv">7</span>,</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="st">"7 días"</span>,</span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>                step<span class="op">=</span><span class="st">"day"</span>,</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>                stepmode<span class="op">=</span><span class="st">"backward"</span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>            <span class="bu">dict</span>(</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a>                count<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="st">"1 mes"</span>,</span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>                step<span class="op">=</span><span class="st">"month"</span>,</span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>                stepmode<span class="op">=</span><span class="st">"backward"</span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>            <span class="bu">dict</span>(label<span class="op">=</span><span class="st">"Todo"</span>, step<span class="op">=</span><span class="st">"all"</span>)</span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_yaxes(</span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>    title_text<span class="op">=</span><span class="st">"Tickets simulados"</span>,</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a>    rangemode<span class="op">=</span><span class="st">"tozero"</span>,</span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>    automargin<span class="op">=</span><span class="va">True</span></span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_layout(</span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>(</span>
+<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SIMULACIÓN: tickets por día"</span></span>
+<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a>            <span class="st">"&lt;br&gt;&lt;sup&gt;Fechas artificiales, no observadas&lt;/sup&gt;"</span></span>
+<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb33-62"><a href="#cb33-62" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="fl">0.02</span>,</span>
+<span id="cb33-63"><a href="#cb33-63" aria-hidden="true" tabindex="-1"></a>        xanchor<span class="op">=</span><span class="st">"left"</span>,</span>
+<span id="cb33-64"><a href="#cb33-64" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="fl">0.98</span>,</span>
+<span id="cb33-65"><a href="#cb33-65" aria-hidden="true" tabindex="-1"></a>        yanchor<span class="op">=</span><span class="st">"top"</span>,</span>
+<span id="cb33-66"><a href="#cb33-66" aria-hidden="true" tabindex="-1"></a>        font<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">17</span>)</span>
+<span id="cb33-67"><a href="#cb33-67" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb33-68"><a href="#cb33-68" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">600</span>,</span>
+<span id="cb33-69"><a href="#cb33-69" aria-hidden="true" tabindex="-1"></a>    autosize<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-70"><a href="#cb33-70" aria-hidden="true" tabindex="-1"></a>    margin<span class="op">=</span><span class="bu">dict</span>(l<span class="op">=</span><span class="dv">70</span>, r<span class="op">=</span><span class="dv">25</span>, t<span class="op">=</span><span class="dv">140</span>, b<span class="op">=</span><span class="dv">70</span>),</span>
+<span id="cb33-71"><a href="#cb33-71" aria-hidden="true" tabindex="-1"></a>    hovermode<span class="op">=</span><span class="st">"x unified"</span></span>
+<span id="cb33-72"><a href="#cb33-72" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-73"><a href="#cb33-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-74"><a href="#cb33-74" aria-hidden="true" tabindex="-1"></a>fig_simulacion.show(</span>
+<span id="cb33-75"><a href="#cb33-75" aria-hidden="true" tabindex="-1"></a>    config<span class="op">=</span>{</span>
+<span id="cb33-76"><a href="#cb33-76" aria-hidden="true" tabindex="-1"></a>        <span class="st">"responsive"</span>: <span class="va">True</span>,</span>
+<span id="cb33-77"><a href="#cb33-77" aria-hidden="true" tabindex="-1"></a>        <span class="st">"displaylogo"</span>: <span class="va">False</span></span>
+<span id="cb33-78"><a href="#cb33-78" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb33-79"><a href="#cb33-79" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-80"><a href="#cb33-80" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_yaxes(rangemode<span class="op">=</span><span class="st">"tozero"</span>)</span>
+<span id="cb33-81"><a href="#cb33-81" aria-hidden="true" tabindex="-1"></a>fig_simulacion.update_layout(hovermode<span class="op">=</span><span class="st">"x unified"</span>)</span>
+<span id="cb33-82"><a href="#cb33-82" aria-hidden="true" tabindex="-1"></a>fig_simulacion.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="height:600px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="08e9e007-88a4-4543-b7dc-9e66855e1aef" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("08e9e007-88a4-4543-b7dc-9e66855e1aef")) {                    Plotly.newPlot(                        "08e9e007-88a4-4543-b7dc-9e66855e1aef",                        [{"hovertemplate":"Fecha SIMULADA: %{x|%d\u002f%m\u002f%Y}\u003cbr\u003eTickets asignados: %{y}\u003cextra\u003eDatos temporales artificiales\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2026-01-01T00:00:00.000000","2026-01-02T00:00:00.000000","2026-01-03T00:00:00.000000","2026-01-04T00:00:00.000000","2026-01-05T00:00:00.000000","2026-01-06T00:00:00.000000","2026-01-07T00:00:00.000000","2026-01-08T00:00:00.000000","2026-01-09T00:00:00.000000","2026-01-10T00:00:00.000000","2026-01-11T00:00:00.000000","2026-01-12T00:00:00.000000","2026-01-13T00:00:00.000000","2026-01-14T00:00:00.000000","2026-01-15T00:00:00.000000","2026-01-16T00:00:00.000000","2026-01-17T00:00:00.000000","2026-01-18T00:00:00.000000","2026-01-19T00:00:00.000000","2026-01-20T00:00:00.000000","2026-01-21T00:00:00.000000","2026-01-22T00:00:00.000000","2026-01-23T00:00:00.000000","2026-01-24T00:00:00.000000","2026-01-25T00:00:00.000000","2026-01-26T00:00:00.000000","2026-01-27T00:00:00.000000","2026-01-28T00:00:00.000000","2026-01-29T00:00:00.000000","2026-01-30T00:00:00.000000","2026-01-31T00:00:00.000000","2026-02-01T00:00:00.000000","2026-02-02T00:00:00.000000","2026-02-03T00:00:00.000000","2026-02-04T00:00:00.000000","2026-02-05T00:00:00.000000","2026-02-06T00:00:00.000000","2026-02-07T00:00:00.000000","2026-02-08T00:00:00.000000","2026-02-09T00:00:00.000000","2026-02-10T00:00:00.000000","2026-02-11T00:00:00.000000","2026-02-12T00:00:00.000000","2026-02-13T00:00:00.000000","2026-02-14T00:00:00.000000","2026-02-15T00:00:00.000000","2026-02-16T00:00:00.000000","2026-02-17T00:00:00.000000","2026-02-18T00:00:00.000000","2026-02-19T00:00:00.000000","2026-02-20T00:00:00.000000","2026-02-21T00:00:00.000000","2026-02-22T00:00:00.000000","2026-02-23T00:00:00.000000","2026-02-24T00:00:00.000000","2026-02-25T00:00:00.000000","2026-02-26T00:00:00.000000","2026-02-27T00:00:00.000000","2026-02-28T00:00:00.000000","2026-03-01T00:00:00.000000","2026-03-02T00:00:00.000000","2026-03-03T00:00:00.000000","2026-03-04T00:00:00.000000","2026-03-05T00:00:00.000000","2026-03-06T00:00:00.000000","2026-03-07T00:00:00.000000","2026-03-08T00:00:00.000000","2026-03-09T00:00:00.000000","2026-03-10T00:00:00.000000","2026-03-11T00:00:00.000000","2026-03-12T00:00:00.000000","2026-03-13T00:00:00.000000","2026-03-14T00:00:00.000000","2026-03-15T00:00:00.000000","2026-03-16T00:00:00.000000","2026-03-17T00:00:00.000000","2026-03-18T00:00:00.000000","2026-03-19T00:00:00.000000","2026-03-20T00:00:00.000000","2026-03-21T00:00:00.000000","2026-03-22T00:00:00.000000","2026-03-23T00:00:00.000000","2026-03-24T00:00:00.000000","2026-03-25T00:00:00.000000","2026-03-26T00:00:00.000000","2026-03-27T00:00:00.000000","2026-03-28T00:00:00.000000","2026-03-29T00:00:00.000000","2026-03-30T00:00:00.000000","2026-03-31T00:00:00.000000"],"xaxis":"x","y":{"dtype":"i2","bdata":"4ADeAPAA9ADdANEA4QDTANYA7wDQAO8A7ADmAOQA1wDcAN4A4gDUANAA5QD0ANQA4wDlAPUA3ADkANgA+QDcANQA0QDRAOoA0gDyANsA7gD9ANMA7wCpANcA9gDmAPcA1QDqANMA5ADWAOQA4gDmAMcA3QDgAOUAzgDdANcA3wDRAOcA5gD+AN4A2gDgAOMAzwDRAMMA4ADnANUAxgDkALgAxADcAPIA2ADIANYA5QDgAO4A"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Fecha simulada"},"rangeslider":{"visible":true,"thickness":0.12},"rangeselector":{"x":0,"xanchor":"left","y":1.07,"yanchor":"bottom","buttons":[{"count":7,"label":"7 d\u00edas","step":"day","stepmode":"backward"},{"count":1,"label":"1 mes","step":"month","stepmode":"backward"},{"label":"Todo","step":"all"}]},"tickformat":"%d\u002f%m\u002f%Y","automargin":true},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Tickets simulados"},"rangemode":"tozero","automargin":true},"legend":{"tracegroupgap":0},"title":{"text":"SIMULACI\u00d3N: tickets por d\u00eda\u003cbr\u003e\u003csup\u003eFechas artificiales, no observadas\u003c\u002fsup\u003e","font":{"size":17},"x":0.02,"xanchor":"left","y":0.98,"yanchor":"top"},"margin":{"l":70,"r":25,"t":140,"b":70},"height":600,"autosize":true,"hovermode":"x unified"},                        {"responsive": true, "displaylogo": false}                    ).then(function(){
+                            
+var gd = document.getElementById('08e9e007-88a4-4543-b7dc-9e66855e1aef');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+<p>SIMULACIÓN: tickets por día con fechas artificiales; no representa demanda observada</p>
+</div>
+<div class="cell-output cell-output-display">
+<div style="height:600px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="f9783ea7-056c-479b-89a9-109c818b3c73" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("f9783ea7-056c-479b-89a9-109c818b3c73")) {                    Plotly.newPlot(                        "f9783ea7-056c-479b-89a9-109c818b3c73",                        [{"hovertemplate":"Fecha SIMULADA: %{x|%d\u002f%m\u002f%Y}\u003cbr\u003eTickets asignados: %{y}\u003cextra\u003eDatos temporales artificiales\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2026-01-01T00:00:00.000000","2026-01-02T00:00:00.000000","2026-01-03T00:00:00.000000","2026-01-04T00:00:00.000000","2026-01-05T00:00:00.000000","2026-01-06T00:00:00.000000","2026-01-07T00:00:00.000000","2026-01-08T00:00:00.000000","2026-01-09T00:00:00.000000","2026-01-10T00:00:00.000000","2026-01-11T00:00:00.000000","2026-01-12T00:00:00.000000","2026-01-13T00:00:00.000000","2026-01-14T00:00:00.000000","2026-01-15T00:00:00.000000","2026-01-16T00:00:00.000000","2026-01-17T00:00:00.000000","2026-01-18T00:00:00.000000","2026-01-19T00:00:00.000000","2026-01-20T00:00:00.000000","2026-01-21T00:00:00.000000","2026-01-22T00:00:00.000000","2026-01-23T00:00:00.000000","2026-01-24T00:00:00.000000","2026-01-25T00:00:00.000000","2026-01-26T00:00:00.000000","2026-01-27T00:00:00.000000","2026-01-28T00:00:00.000000","2026-01-29T00:00:00.000000","2026-01-30T00:00:00.000000","2026-01-31T00:00:00.000000","2026-02-01T00:00:00.000000","2026-02-02T00:00:00.000000","2026-02-03T00:00:00.000000","2026-02-04T00:00:00.000000","2026-02-05T00:00:00.000000","2026-02-06T00:00:00.000000","2026-02-07T00:00:00.000000","2026-02-08T00:00:00.000000","2026-02-09T00:00:00.000000","2026-02-10T00:00:00.000000","2026-02-11T00:00:00.000000","2026-02-12T00:00:00.000000","2026-02-13T00:00:00.000000","2026-02-14T00:00:00.000000","2026-02-15T00:00:00.000000","2026-02-16T00:00:00.000000","2026-02-17T00:00:00.000000","2026-02-18T00:00:00.000000","2026-02-19T00:00:00.000000","2026-02-20T00:00:00.000000","2026-02-21T00:00:00.000000","2026-02-22T00:00:00.000000","2026-02-23T00:00:00.000000","2026-02-24T00:00:00.000000","2026-02-25T00:00:00.000000","2026-02-26T00:00:00.000000","2026-02-27T00:00:00.000000","2026-02-28T00:00:00.000000","2026-03-01T00:00:00.000000","2026-03-02T00:00:00.000000","2026-03-03T00:00:00.000000","2026-03-04T00:00:00.000000","2026-03-05T00:00:00.000000","2026-03-06T00:00:00.000000","2026-03-07T00:00:00.000000","2026-03-08T00:00:00.000000","2026-03-09T00:00:00.000000","2026-03-10T00:00:00.000000","2026-03-11T00:00:00.000000","2026-03-12T00:00:00.000000","2026-03-13T00:00:00.000000","2026-03-14T00:00:00.000000","2026-03-15T00:00:00.000000","2026-03-16T00:00:00.000000","2026-03-17T00:00:00.000000","2026-03-18T00:00:00.000000","2026-03-19T00:00:00.000000","2026-03-20T00:00:00.000000","2026-03-21T00:00:00.000000","2026-03-22T00:00:00.000000","2026-03-23T00:00:00.000000","2026-03-24T00:00:00.000000","2026-03-25T00:00:00.000000","2026-03-26T00:00:00.000000","2026-03-27T00:00:00.000000","2026-03-28T00:00:00.000000","2026-03-29T00:00:00.000000","2026-03-30T00:00:00.000000","2026-03-31T00:00:00.000000"],"xaxis":"x","y":{"dtype":"i2","bdata":"4ADeAPAA9ADdANEA4QDTANYA7wDQAO8A7ADmAOQA1wDcAN4A4gDUANAA5QD0ANQA4wDlAPUA3ADkANgA+QDcANQA0QDRAOoA0gDyANsA7gD9ANMA7wCpANcA9gDmAPcA1QDqANMA5ADWAOQA4gDmAMcA3QDgAOUAzgDdANcA3wDRAOcA5gD+AN4A2gDgAOMAzwDRAMMA4ADnANUAxgDkALgAxADcAPIA2ADIANYA5QDgAO4A"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Fecha simulada"},"rangeslider":{"visible":true,"thickness":0.12},"rangeselector":{"x":0,"xanchor":"left","y":1.07,"yanchor":"bottom","buttons":[{"count":7,"label":"7 d\u00edas","step":"day","stepmode":"backward"},{"count":1,"label":"1 mes","step":"month","stepmode":"backward"},{"label":"Todo","step":"all"}]},"tickformat":"%d\u002f%m\u002f%Y","automargin":true},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Tickets simulados"},"rangemode":"tozero","automargin":true},"legend":{"tracegroupgap":0},"title":{"text":"SIMULACI\u00d3N: tickets por d\u00eda\u003cbr\u003e\u003csup\u003eFechas artificiales, no observadas\u003c\u002fsup\u003e","font":{"size":17},"x":0.02,"xanchor":"left","y":0.98,"yanchor":"top"},"margin":{"l":70,"r":25,"t":140,"b":70},"height":600,"autosize":true,"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('f9783ea7-056c-479b-89a9-109c818b3c73');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p>Interpretación técnica: el gráfico permite explorar la variación temporal de un escenario simulado, consultar valores y ampliar intervalos. Las oscilaciones dependen de la asignación pseudoaleatoria: no prueban sobrecarga, estacionalidad, mejoras del servicio ni incidentes ocurridos en esas fechas.</p>
+<p>Aplicación SysAdmin: este procedimiento puede probar un panel antes de disponer de fechas reales. Para tomar decisiones operativas habría que sustituir <code>fecha_simulada</code> por timestamps verificados y repetir el análisis. No se recomienda cambiar personal, guardias o infraestructura a partir de esta simulación.</p>
+</section>
 </section>
 </section>
 <section id="conclusiones" class="level2">
 <h2 class="anchored" data-anchor-id="conclusiones">5. Conclusiones</h2>
 <section id="resultados-calculados" class="level3">
 <h3 class="anchored" data-anchor-id="resultados-calculados">5.1 Resultados calculados</h3>
-<div id="35c54e63" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Registros analizados: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    departamento_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    cantidad_departamento <span class="op">=</span> <span class="bu">int</span>(volumen_por_cola.<span class="bu">max</span>())</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Departamento con mayor volumen: </span><span class="sc">{</span>departamento_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_departamento<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>prioridades_validas <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts()</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> prioridades_validas.empty:</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    prioridad_principal <span class="op">=</span> prioridades_validas.idxmax()</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    cantidad_prioridad <span class="op">=</span> <span class="bu">int</span>(prioridades_validas.<span class="bu">max</span>())</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Prioridad más frecuente: </span><span class="sc">{</span>prioridad_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_prioridad<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Incidentes de prioridad alta seleccionados: </span><span class="sc">{</span><span class="bu">len</span>(tickets_urgentes)<span class="sc">}</span><span class="ss">."</span>)</span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> altos_por_idioma.empty:</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    idioma_principal <span class="op">=</span> altos_por_idioma.idxmax()</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    cantidad_altos <span class="op">=</span> <span class="bu">int</span>(altos_por_idioma.<span class="bu">max</span>())</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Idioma con más tickets de prioridad alta: </span><span class="sc">{</span>idioma_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_altos<span class="sc">}</span><span class="ss"> tickets)."</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="cebe2b2f" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Registros analizados: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    departamento_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    cantidad_departamento <span class="op">=</span> <span class="bu">int</span>(volumen_por_cola.<span class="bu">max</span>())</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Departamento con mayor volumen: </span><span class="sc">{</span>departamento_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_departamento<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>prioridades_validas <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts()</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> prioridades_validas.empty:</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    prioridad_principal <span class="op">=</span> prioridades_validas.idxmax()</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    cantidad_prioridad <span class="op">=</span> <span class="bu">int</span>(prioridades_validas.<span class="bu">max</span>())</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Prioridad más frecuente: </span><span class="sc">{</span>prioridad_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_prioridad<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Incidentes de prioridad alta seleccionados: </span><span class="sc">{</span><span class="bu">len</span>(tickets_urgentes)<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> altos_por_idioma.empty:</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    idioma_principal <span class="op">=</span> altos_por_idioma.idxmax()</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    cantidad_altos <span class="op">=</span> <span class="bu">int</span>(altos_por_idioma.<span class="bu">max</span>())</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Idioma con más tickets de prioridad alta: </span><span class="sc">{</span>idioma_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_altos<span class="sc">}</span><span class="ss"> tickets)."</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Registros analizados: 20000
 Departamento con mayor volumen: Technical Support (5824 tickets).
@@ -1432,7 +1778,8 @@ Idioma con más tickets de prioridad alta: en (4571 tickets).</code></pre>
 <li><code>concat</code> reúne subconjuntos del mismo archivo, no fuentes independientes.</li>
 <li>Las agrupaciones excluyen categorías ausentes salvo donde se indica lo contrario.</li>
 <li>Si hay empates en los máximos, el texto automático muestra una de las categorías empatadas.</li>
-<li>El análisis temporal sigue pendiente de verificar una fecha válida o acordar una alternativa.</li>
+<li>La serie del apartado 4.5 utiliza fechas simuladas: demuestra el procedimiento técnico, no evolución temporal observada.</li>
+<li>La aceptación académica de una simulación depende de la interpretación del docente; no se afirma que equivalga a disponer de timestamps originales.</li>
 </ul>
 </section>
 </section>
@@ -1442,15 +1789,19 @@ Idioma con más tickets de prioridad alta: en (4571 tickets).</code></pre>
 <section id="fuentes-consultadas" class="level3">
 <h3 class="anchored" data-anchor-id="fuentes-consultadas">Fuentes consultadas</h3>
 <ul>
-<li><a href="https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets">Dataset de Tobias Bueck en Kaggle</a>.</li>
-<li><a href="https://pandas.pydata.org/docs/user_guide/">Guía de usuario de Pandas</a>.</li>
-<li><a href="https://pandas.pydata.org/docs/user_guide/groupby.html">Agrupaciones con Pandas</a>.</li>
-<li><a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Selección e indexación</a>.</li>
-<li><a href="https://pandas.pydata.org/docs/user_guide/merging.html">Combinación de datos</a>.</li>
-<li><a href="https://seaborn.pydata.org/tutorial/aesthetics.html">Estética en Seaborn</a>.</li>
-<li><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.bar_label.html">Etiquetas de barras en Matplotlib</a>.</li>
-<li><a href="https://plotly.com/python/templates/">Plantillas de Plotly</a>.</li>
-<li><a href="https://plotly.com/python/discrete-color/">Colores discretos de Plotly</a>.</li>
+<li><p><a href="https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets">Dataset de Tobias Bueck en Kaggle</a>.</p></li>
+<li><p><a href="https://pandas.pydata.org/docs/user_guide/">Guía de usuario de Pandas</a>.</p></li>
+<li><p><a href="https://pandas.pydata.org/docs/user_guide/groupby.html">Agrupaciones con Pandas</a>.</p></li>
+<li><p><a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Selección e indexación</a>.</p></li>
+<li><p><a href="https://pandas.pydata.org/docs/user_guide/merging.html">Combinación de datos</a>.</p></li>
+<li><p><a href="https://seaborn.pydata.org/tutorial/aesthetics.html">Estética en Seaborn</a>.</p></li>
+<li><p><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.bar_label.html">Etiquetas de barras en Matplotlib</a>.</p></li>
+<li><p><a href="https://plotly.com/python/templates/">Plantillas de Plotly</a>.</p></li>
+<li><p><a href="https://plotly.com/python/discrete-color/">Colores discretos de Plotly</a>.</p></li>
+<li><p><a href="https://numpy.org/doc/stable/reference/random/generator.html">Generador pseudoaleatorio y semillas de NumPy</a>.</p></li>
+<li><p><a href="https://pandas.pydata.org/docs/user_guide/timeseries.html">Series temporales con Pandas</a>.</p></li>
+<li><p><a href="https://plotly.com/python/time-series/">Series temporales con Plotly</a>.</p></li>
+<li><p><a href="https://plotly.com/python/range-slider/">Selector de intervalos de Plotly</a>.</p></li>
 </ul>
 </section>
 </section>

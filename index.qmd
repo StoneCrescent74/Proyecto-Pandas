@@ -506,12 +506,63 @@ fig_simulacion.update_traces(
     )
 )
 fig_simulacion.update_xaxes(
+    title_text="Fecha simulada",
+    tickformat="%d/%m/%Y",
+    automargin=True,
     rangeslider_visible=True,
-    rangeselector=dict(buttons=[
-        dict(count=7, label="7 días", step="day", stepmode="backward"),
-        dict(count=1, label="1 mes", step="month", stepmode="backward"),
-        dict(label="Todo", step="all")
-    ])
+    rangeslider_thickness=0.12,
+    rangeselector=dict(
+        x=0,
+        xanchor="left",
+        y=1.07,
+        yanchor="bottom",
+        buttons=[
+            dict(
+                count=7,
+                label="7 días",
+                step="day",
+                stepmode="backward"
+            ),
+            dict(
+                count=1,
+                label="1 mes",
+                step="month",
+                stepmode="backward"
+            ),
+            dict(label="Todo", step="all")
+        ]
+    )
+)
+
+fig_simulacion.update_yaxes(
+    title_text="Tickets simulados",
+    rangemode="tozero",
+    automargin=True
+)
+
+fig_simulacion.update_layout(
+    title=dict(
+        text=(
+            "SIMULACIÓN: tickets por día"
+            "<br><sup>Fechas artificiales, no observadas</sup>"
+        ),
+        x=0.02,
+        xanchor="left",
+        y=0.98,
+        yanchor="top",
+        font=dict(size=17)
+    ),
+    height=600,
+    autosize=True,
+    margin=dict(l=70, r=25, t=140, b=70),
+    hovermode="x unified"
+)
+
+fig_simulacion.show(
+    config={
+        "responsive": True,
+        "displaylogo": False
+    }
 )
 fig_simulacion.update_yaxes(rangemode="tozero")
 fig_simulacion.update_layout(hovermode="x unified")
