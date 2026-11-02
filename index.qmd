@@ -564,9 +564,6 @@ fig_simulacion.show(
         "displaylogo": False
     }
 )
-fig_simulacion.update_yaxes(rangemode="tozero")
-fig_simulacion.update_layout(hovermode="x unified")
-fig_simulacion.show()
 ```
 
 Interpretación técnica: el gráfico permite explorar la variación temporal de un escenario simulado, consultar valores y ampliar intervalos. Las oscilaciones dependen de la asignación pseudoaleatoria: no prueban sobrecarga, estacionalidad, mejoras del servicio ni incidentes ocurridos en esas fechas.
