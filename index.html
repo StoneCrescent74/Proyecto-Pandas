@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.11.9">
@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-943e08653f4bd8ac7ab9292bfc489267.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-d00bc8e66a4761cd839a5785aef874ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -90,10 +90,57 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 
 </head>
 
-<body class="fullcontent quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+<body class="quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Saltar al contenido principal</a>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">Contenido</h2>
+   
+  <ul>
+  <li><a href="#contexto-y-dataset" id="toc-contexto-y-dataset" class="nav-link active" data-scroll-target="#contexto-y-dataset">1. Contexto y dataset</a>
+  <ul class="collapse">
+  <li><a href="#origen-y-justificación" id="toc-origen-y-justificación" class="nav-link" data-scroll-target="#origen-y-justificación">1.1 Origen y justificación</a></li>
+  <li><a href="#columnas-principales" id="toc-columnas-principales" class="nav-link" data-scroll-target="#columnas-principales">1.2 Columnas principales</a></li>
+  <li><a href="#preguntas-del-análisis" id="toc-preguntas-del-análisis" class="nav-link" data-scroll-target="#preguntas-del-análisis">1.3 Preguntas del análisis</a></li>
+  </ul></li>
+  <li><a href="#exploración-inicial-y-limpieza" id="toc-exploración-inicial-y-limpieza" class="nav-link" data-scroll-target="#exploración-inicial-y-limpieza">2. Exploración inicial y limpieza</a>
+  <ul class="collapse">
+  <li><a href="#carga-y-estructura" id="toc-carga-y-estructura" class="nav-link" data-scroll-target="#carga-y-estructura">2.1 Carga y estructura</a></li>
+  <li><a href="#resumen-descriptivo" id="toc-resumen-descriptivo" class="nav-link" data-scroll-target="#resumen-descriptivo">2.2 Resumen descriptivo</a></li>
+  <li><a href="#detección-de-nulos-y-duplicados" id="toc-detección-de-nulos-y-duplicados" class="nav-link" data-scroll-target="#detección-de-nulos-y-duplicados">2.3 Detección de nulos y duplicados</a></li>
+  <li><a href="#normalización-de-categorías" id="toc-normalización-de-categorías" class="nav-link" data-scroll-target="#normalización-de-categorías">2.4 Normalización de categorías</a></li>
+  <li><a href="#tres-resúmenes-estadísticos-clave" id="toc-tres-resúmenes-estadísticos-clave" class="nav-link" data-scroll-target="#tres-resúmenes-estadísticos-clave">2.5 Tres resúmenes estadísticos clave</a></li>
+  <li><a href="#selección-por-posición-con-iloc" id="toc-selección-por-posición-con-iloc" class="nav-link" data-scroll-target="#selección-por-posición-con-iloc">2.6 Selección por posición con <code>iloc</code></a></li>
+  </ul></li>
+  <li><a href="#análisis-avanzado-con-pandas" id="toc-análisis-avanzado-con-pandas" class="nav-link" data-scroll-target="#análisis-avanzado-con-pandas">3. Análisis avanzado con Pandas</a>
+  <ul class="collapse">
+  <li><a href="#agrupación-con-groupby" id="toc-agrupación-con-groupby" class="nav-link" data-scroll-target="#agrupación-con-groupby">3.1 Agrupación con <code>groupby</code></a></li>
+  <li><a href="#tabla-dinámica-con-pivot_table" id="toc-tabla-dinámica-con-pivot_table" class="nav-link" data-scroll-target="#tabla-dinámica-con-pivot_table">3.2 Tabla dinámica con <code>pivot_table</code></a></li>
+  <li><a href="#filtrado-avanzado-con-loc" id="toc-filtrado-avanzado-con-loc" class="nav-link" data-scroll-target="#filtrado-avanzado-con-loc">3.3 Filtrado avanzado con <code>loc</code></a></li>
+  <li><a href="#combinación-de-subconjuntos-con-concat" id="toc-combinación-de-subconjuntos-con-concat" class="nav-link" data-scroll-target="#combinación-de-subconjuntos-con-concat">3.4 Combinación de subconjuntos con <code>concat</code></a></li>
+  </ul></li>
+  <li><a href="#visualizaciones" id="toc-visualizaciones" class="nav-link" data-scroll-target="#visualizaciones">4. Visualizaciones</a>
+  <ul class="collapse">
+  <li><a href="#preparación-de-prioridades-y-colores" id="toc-preparación-de-prioridades-y-colores" class="nav-link" data-scroll-target="#preparación-de-prioridades-y-colores">4.1 Preparación de prioridades y colores</a></li>
+  <li><a href="#gráfico-estático-tickets-por-prioridad" id="toc-gráfico-estático-tickets-por-prioridad" class="nav-link" data-scroll-target="#gráfico-estático-tickets-por-prioridad">4.2 Gráfico estático: tickets por prioridad</a></li>
+  <li><a href="#gráfico-estático-carga-por-departamento-y-prioridad" id="toc-gráfico-estático-carga-por-departamento-y-prioridad" class="nav-link" data-scroll-target="#gráfico-estático-carga-por-departamento-y-prioridad">4.3 Gráfico estático: carga por departamento y prioridad</a></li>
+  <li><a href="#gráfico-interactivo-con-plotly" id="toc-gráfico-interactivo-con-plotly" class="nav-link" data-scroll-target="#gráfico-interactivo-con-plotly">4.4 Gráfico interactivo con Plotly</a></li>
+  <li><a href="#limitación-del-requisito-temporal" id="toc-limitación-del-requisito-temporal" class="nav-link" data-scroll-target="#limitación-del-requisito-temporal">4.5 Limitación del requisito temporal</a></li>
+  </ul></li>
+  <li><a href="#conclusiones" id="toc-conclusiones" class="nav-link" data-scroll-target="#conclusiones">5. Conclusiones</a>
+  <ul class="collapse">
+  <li><a href="#resultados-calculados" id="toc-resultados-calculados" class="nav-link" data-scroll-target="#resultados-calculados">5.1 Resultados calculados</a></li>
+  <li><a href="#propuestas-desde-la-administración-de-sistemas" id="toc-propuestas-desde-la-administración-de-sistemas" class="nav-link" data-scroll-target="#propuestas-desde-la-administración-de-sistemas">5.2 Propuestas desde la administración de sistemas</a></li>
+  <li><a href="#limitaciones" id="toc-limitaciones" class="nav-link" data-scroll-target="#limitaciones">5.3 Limitaciones</a></li>
+  </ul></li>
+  <li><a href="#fuentes-y-metodología-de-trabajo" id="toc-fuentes-y-metodología-de-trabajo" class="nav-link" data-scroll-target="#fuentes-y-metodología-de-trabajo">6. Fuentes y metodología de trabajo</a>
+  <ul class="collapse">
+  <li><a href="#fuentes-consultadas" id="toc-fuentes-consultadas" class="nav-link" data-scroll-target="#fuentes-consultadas">Fuentes consultadas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -106,7 +153,7 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Autor/a</div>
     <div class="quarto-title-meta-contents">
              <p>Grupo J: Victor, Mercedes, Alejandro y Christopher </p>
           </div>
@@ -123,32 +170,100 @@ if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.M
 
 <section id="contexto-y-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="contexto-y-dataset">1. Contexto y dataset</h2>
-<p>Para este proyecto hemos utilizado un dataset público de Kaggle con tickets de soporte técnico. El objetivo es analizar la carga de trabajo de un helpdesk desde la perspectiva de un administrador de sistemas: qué departamentos reciben más incidencias, qué prioridades predominan y qué tickets deberían atenderse primero.</p>
-<p><strong>Fuente:</strong> <a href="https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets">Customer IT Support - Ticket Dataset</a></p>
-<p><strong>Columnas principales:</strong></p>
-<ul>
-<li><code>queue</code>: departamento o cola de soporte al que se asigna el ticket.</li>
-<li><code>priority</code>: prioridad del ticket.</li>
-<li><code>type</code>: tipo de incidencia, por ejemplo incidente, petición o problema.</li>
-<li><code>language</code>: idioma del ticket.</li>
-<li><code>subject</code>: asunto del correo o ticket.</li>
-</ul>
+<section id="origen-y-justificación" class="level3">
+<h3 class="anchored" data-anchor-id="origen-y-justificación">1.1 Origen y justificación</h3>
+<p>Para este proyecto hemos seleccionado un dataset público de tickets de soporte. El objetivo es analizar el volumen de incidencias desde la perspectiva de un administrador de sistemas: qué departamentos reciben más tickets, qué prioridades predominan y qué registros conviene revisar primero.</p>
+<p>Fuente: <a href="https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets">Customer IT Support - Ticket Dataset, de Tobias Bueck</a>.</p>
+<p>Archivo utilizado: <code>dataset-tickets-multi-lang-4-20k.csv</code>.</p>
+<p>El dataset contiene tickets generados sintéticamente y se distribuye bajo la licencia CC BY 4.0. Los resultados describen esta muestra y sirven como ejercicio de análisis; no demuestran la carga de trabajo real de una empresa.</p>
+<p>Incluye departamentos técnicos y otras áreas de atención al cliente. Por tanto, no todos los tickets representan fallos de infraestructura.</p>
+</section>
+<section id="columnas-principales" class="level3">
+<h3 class="anchored" data-anchor-id="columnas-principales">1.2 Columnas principales</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Columna</th>
+<th>Significado</th>
+<th>Utilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>queue</code></td>
+<td>Departamento o cola asignada</td>
+<td>Comparar volumen entre equipos</td>
+</tr>
+<tr class="even">
+<td><code>priority</code></td>
+<td>Prioridad asignada</td>
+<td>Identificar registros de revisión preferente</td>
+</tr>
+<tr class="odd">
+<td><code>type</code></td>
+<td>Tipo de ticket</td>
+<td>Distinguir incidentes, solicitudes, problemas y cambios</td>
+</tr>
+<tr class="even">
+<td><code>language</code></td>
+<td>Idioma del ticket</td>
+<td>Analizar necesidades lingüísticas</td>
+</tr>
+<tr class="odd">
+<td><code>subject</code></td>
+<td>Asunto del ticket</td>
+<td>Consultar ejemplos de incidencias</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="preguntas-del-análisis" class="level3">
+<h3 class="anchored" data-anchor-id="preguntas-del-análisis">1.3 Preguntas del análisis</h3>
+<ol type="1">
+<li>¿Cómo se distribuyen los tickets por prioridad?</li>
+<li>¿Qué departamentos concentran más tickets y de qué tipo?</li>
+<li>¿Cómo se relacionan prioridad e idioma?</li>
+<li>¿Qué tickets combinan prioridad alta y tipo incidente?</li>
+<li>¿Qué limitaciones tienen estos datos para tomar decisiones operativas?</li>
+</ol>
+</section>
 </section>
 <section id="exploración-inicial-y-limpieza" class="level2">
 <h2 class="anchored" data-anchor-id="exploración-inicial-y-limpieza">2. Exploración inicial y limpieza</h2>
-<p>En este apartado cargamos el dataset y comprobamos su estructura, tipos de datos, valores nulos y distribución de las variables más relevantes.</p>
-<div id="5d7ea61a" class="cell" data-execution_count="1">
+<section id="carga-y-estructura" class="level3">
+<h3 class="anchored" data-anchor-id="carga-y-estructura">2.1 Carga y estructura</h3>
+<p>Conservamos una copia original para comparar los datos antes y después de las transformaciones.</p>
+<div id="7d3945ac" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"dataset-tickets-multi-lang-4-20k.csv"</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"El dataset tiene </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss"> filas y </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss"> columnas."</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>archivo <span class="op">=</span> <span class="st">"dataset-tickets-multi-lang-4-20k.csv"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df_original <span class="op">=</span> pd.read_csv(archivo)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df_original.copy()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>columnas_necesarias <span class="op">=</span> [<span class="st">"queue"</span>, <span class="st">"priority"</span>, <span class="st">"type"</span>, <span class="st">"language"</span>, <span class="st">"subject"</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>columnas_faltantes <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> columnas_necesarias <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> df.columns]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> columnas_faltantes:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Faltan columnas necesarias: </span><span class="sc">{</span>columnas_faltantes<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> df.empty:</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"El CSV no contiene registros para analizar."</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>numero_filas, numero_columnas <span class="op">=</span> df.shape</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"El dataset tiene </span><span class="sc">{</span>numero_filas<span class="sc">}</span><span class="ss"> filas y </span><span class="sc">{</span>numero_columnas<span class="sc">}</span><span class="ss"> columnas."</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Columnas disponibles:"</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns.tolist())</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>df.info()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>El dataset tiene (20000, 15) filas y (20000, 15) columnas.
+<pre><code>El dataset tiene 20000 filas y 15 columnas.
+Columnas disponibles:
+['subject', 'body', 'answer', 'type', 'queue', 'priority', 'language', 'tag_1', 'tag_2', 'tag_3', 'tag_4', 'tag_5', 'tag_6', 'tag_7', 'tag_8']
 &lt;class 'pandas.DataFrame'&gt;
 RangeIndex: 20000 entries, 0 to 19999
 Data columns (total 15 columns):
@@ -173,9 +288,13 @@ dtypes: str(15)
 memory usage: 2.3 MB</code></pre>
 </div>
 </div>
-<div id="fd5e331b" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe(include<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<p>Interpretación técnica: comprobamos estructura, tipos y disponibilidad de las columnas necesarias. Un SysAdmin debe verificar el formato de las exportaciones antes de automatizar su análisis.</p>
+</section>
+<section id="resumen-descriptivo" class="level3">
+<h3 class="anchored" data-anchor-id="resumen-descriptivo">2.2 Resumen descriptivo</h3>
+<div id="27169970" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.describe(include<span class="op">=</span><span class="st">"all"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -279,78 +398,393 @@ memory usage: 2.3 MB</code></pre>
 </div>
 </div>
 </div>
-<div id="ec923c78" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Distribución de prioridades:"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">"priority"</span>].value_counts())</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Distribución por idioma:"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">"language"</span>].value_counts())</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Distribución por tipo de ticket:"</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">"type"</span>].value_counts())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Interpretación técnica: el resumen permite revisar valores no nulos, categorías distintas y valores frecuentes. Un asunto repetido no demuestra por sí solo una misma causa raíz.</p>
+</section>
+<section id="detección-de-nulos-y-duplicados" class="level3">
+<h3 class="anchored" data-anchor-id="detección-de-nulos-y-duplicados">2.3 Detección de nulos y duplicados</h3>
+<div id="e309b52e" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>auditoria_nulos <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"nulos"</span>: df.isna().<span class="bu">sum</span>(),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"porcentaje_nulos"</span>: (df.isna().mean() <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>auditoria_nulos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">nulos</th>
+<th data-quarto-table-cell-role="th">porcentaje_nulos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">subject</th>
+<td>1461</td>
+<td>7.31</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">body</th>
+<td>2</td>
+<td>0.01</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">answer</th>
+<td>4</td>
+<td>0.02</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">type</th>
+<td>0</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">queue</th>
+<td>0</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">priority</th>
+<td>0</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">language</th>
+<td>0</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">tag_1</th>
+<td>0</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">tag_2</th>
+<td>46</td>
+<td>0.23</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">tag_3</th>
+<td>95</td>
+<td>0.48</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">tag_4</th>
+<td>1539</td>
+<td>7.70</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">tag_5</th>
+<td>6909</td>
+<td>34.54</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">tag_6</th>
+<td>12649</td>
+<td>63.24</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">tag_7</th>
+<td>16072</td>
+<td>80.36</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">tag_8</th>
+<td>18093</td>
+<td>90.46</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: un nulo en una etiqueta opcional no justifica borrar todo el ticket. La ausencia de prioridad o departamento sí limita los análisis que utilizan esas variables.</p>
+<div id="cb57b80f" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>duplicados_exactos <span class="op">=</span> <span class="bu">int</span>(df.duplicated().<span class="bu">sum</span>())</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Filas completamente duplicadas: </span><span class="sc">{</span>duplicados_exactos<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Distribución de prioridades:
-priority
-medium    8144
-high      7801
-low       4055
-Name: count, dtype: int64
-
-Distribución por idioma:
-language
-en    11923
-de     8077
-Name: count, dtype: int64
-
-Distribución por tipo de ticket:
-type
-Incident    7978
-Request     5763
-Problem     4184
-Change      2075
-Name: count, dtype: int64</code></pre>
+<pre><code>Filas completamente duplicadas: 0</code></pre>
 </div>
 </div>
-<div id="76a79572" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Valores nulos por columna:"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Filas duplicadas:"</span>)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.duplicated().<span class="bu">sum</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Decisión de limpieza: conservamos los duplicados y documentamos su número. Sin verificar identificadores o fechas, dos filas iguales no demuestran por sí solas un error de exportación. Su eliminación requeriría una comprobación adicional.</p>
+</section>
+<section id="normalización-de-categorías" class="level3">
+<h3 class="anchored" data-anchor-id="normalización-de-categorías">2.4 Normalización de categorías</h3>
+<p>Eliminamos espacios al principio y al final y normalizamos mayúsculas y minúsculas. Las categorías vacías pasan a ser valores ausentes.</p>
+<div id="7b385f27" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>columnas_categoricas <span class="op">=</span> [<span class="st">"queue"</span>, <span class="st">"priority"</span>, <span class="st">"type"</span>, <span class="st">"language"</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> columna <span class="kw">in</span> columnas_categoricas:</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    df[columna] <span class="op">=</span> df[columna].astype(<span class="st">"string"</span>).<span class="bu">str</span>.strip().replace(<span class="st">""</span>, pd.NA)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> columna <span class="kw">in</span> [<span class="st">"priority"</span>, <span class="st">"language"</span>, <span class="st">"type"</span>]:</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    df[columna] <span class="op">=</span> df[columna].<span class="bu">str</span>.lower()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> columna <span class="kw">in</span> columnas_categoricas:</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    cambios <span class="op">=</span> (</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        df_original[columna].astype(<span class="st">"string"</span>).fillna(<span class="st">"&lt;NULO&gt;"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        .ne(df[columna].fillna(<span class="st">"&lt;NULO&gt;"</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">sum</span>()</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>columna<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>cambios<span class="sc">}</span><span class="ss"> valores modificados"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Filas conservadas: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Valores nulos por columna:
-subject      1461
-body            2
-answer          4
-type            0
-queue           0
-priority        0
-language        0
-tag_1           0
-tag_2          46
-tag_3          95
-tag_4        1539
-tag_5        6909
-tag_6       12649
-tag_7       16072
-tag_8       18093
-dtype: int64
+<pre><code>queue: 0 valores modificados
+priority: 0 valores modificados
+type: 20000 valores modificados
+language: 0 valores modificados
+Filas conservadas: 20000</code></pre>
+</div>
+</div>
+<p>Interpretación técnica: evitamos separar categorías por espacios o mayúsculas. No alteramos el contenido de los asuntos. El filtro de incidentes utilizará <code>incident</code> porque hemos normalizado <code>type</code> a minúsculas.</p>
+</section>
+<section id="tres-resúmenes-estadísticos-clave" class="level3">
+<h3 class="anchored" data-anchor-id="tres-resúmenes-estadísticos-clave">2.5 Tres resúmenes estadísticos clave</h3>
+<p>Los porcentajes se calculan sobre el total de filas, incluyendo los valores ausentes en el resumen.</p>
+<div id="47063f14" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen_categorias(serie):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    frecuencias <span class="op">=</span> serie.value_counts(dropna<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"tickets"</span>: frecuencias,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"porcentaje"</span>: (frecuencias <span class="op">/</span> <span class="bu">len</span>(serie) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    })</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="resumen-1-prioridades" class="level4">
+<h4 class="anchored" data-anchor-id="resumen-1-prioridades">Resumen 1: prioridades</h4>
+<div id="a2ff44ae" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>resumen_prioridades <span class="op">=</span> resumen_categorias(df[<span class="st">"priority"</span>])</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>resumen_prioridades</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
 
-Filas duplicadas:
-0</code></pre>
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tickets</th>
+<th data-quarto-table-cell-role="th">porcentaje</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">priority</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">medium</th>
+<td>8144</td>
+<td>40.72</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">high</th>
+<td>7801</td>
+<td>39.01</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">low</th>
+<td>4055</td>
+<td>20.28</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> con <code>info()</code> comprobamos el tipo de datos y la existencia de valores nulos. Con <code>describe()</code> obtenemos un resumen estadístico general y con <code>value_counts()</code> vemos qué categorías predominan. Si hubiera duplicados o nulos en columnas relevantes, un administrador debería limpiarlos antes de analizar los datos para no distorsionar las métricas de carga del helpdesk.</p>
+</div>
+<p>Interpretación técnica: la distribución permite revisar la clasificación de urgencia. Una proporción alta de tickets urgentes justificaría comprobar el criterio de prioridad, pero no demuestra sobrecarga por sí sola.</p>
+</section>
+<section id="resumen-2-idiomas" class="level4">
+<h4 class="anchored" data-anchor-id="resumen-2-idiomas">Resumen 2: idiomas</h4>
+<div id="ded1b375" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>resumen_idiomas <span class="op">=</span> resumen_categorias(df[<span class="st">"language"</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>resumen_idiomas</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tickets</th>
+<th data-quarto-table-cell-role="th">porcentaje</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">language</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">en</th>
+<td>11923</td>
+<td>59.61</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">de</th>
+<td>8077</td>
+<td>40.38</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: orienta sobre competencias lingüísticas necesarias. Para organizar guardias reales también harían falta horarios de llegada y disponibilidad del personal.</p>
+</section>
+<section id="resumen-3-tipos-de-ticket" class="level4">
+<h4 class="anchored" data-anchor-id="resumen-3-tipos-de-ticket">Resumen 3: tipos de ticket</h4>
+<div id="7d45f8a2" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>resumen_tipos <span class="op">=</span> resumen_categorias(df[<span class="st">"type"</span>])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>resumen_tipos</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">tickets</th>
+<th data-quarto-table-cell-role="th">porcentaje</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">incident</th>
+<td>7978</td>
+<td>39.89</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">request</th>
+<td>5763</td>
+<td>28.82</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">problem</th>
+<td>4184</td>
+<td>20.92</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">change</th>
+<td>2075</td>
+<td>10.38</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: distinguir incidentes, solicitudes, problemas y cambios ayuda a separar trabajo reactivo y planificado. Se revisarían las categorías más frecuentes para estudiar tareas repetitivas que puedan documentarse o automatizarse.</p>
+</section>
+</section>
+<section id="selección-por-posición-con-iloc" class="level3">
+<h3 class="anchored" data-anchor-id="selección-por-posición-con-iloc">2.6 Selección por posición con <code>iloc</code></h3>
+<div id="3878150e" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df.iloc[:<span class="dv">5</span>, :<span class="dv">7</span>]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">subject</th>
+<th data-quarto-table-cell-role="th">body</th>
+<th data-quarto-table-cell-role="th">answer</th>
+<th data-quarto-table-cell-role="th">type</th>
+<th data-quarto-table-cell-role="th">queue</th>
+<th data-quarto-table-cell-role="th">priority</th>
+<th data-quarto-table-cell-role="th">language</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Unvorhergesehener Absturz der Datenanalyse-Pla...</td>
+<td>Die Datenanalyse-Plattform brach unerwartet ab...</td>
+<td>Ich werde Ihnen bei der Lösung des Problems he...</td>
+<td>incident</td>
+<td>General Inquiry</td>
+<td>low</td>
+<td>de</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Customer Support Inquiry</td>
+<td>Seeking information on digital strategies that...</td>
+<td>We offer a variety of digital strategies and s...</td>
+<td>request</td>
+<td>Customer Service</td>
+<td>medium</td>
+<td>en</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Data Analytics for Investment</td>
+<td>I am contacting you to request information on ...</td>
+<td>I am here to assist you with data analytics to...</td>
+<td>request</td>
+<td>Customer Service</td>
+<td>medium</td>
+<td>en</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Krankenhaus-Dienstleistung-Problem</td>
+<td>Ein Medien-Daten-Sperrverhalten trat aufgrund ...</td>
+<td>Zurück zur E-Mail-Beschwerde über den Sperrver...</td>
+<td>incident</td>
+<td>Customer Service</td>
+<td>high</td>
+<td>de</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Security</td>
+<td>Dear Customer Support, I am reaching out to in...</td>
+<td>Dear [name], we take the security of medical d...</td>
+<td>request</td>
+<td>Customer Service</td>
+<td>medium</td>
+<td>en</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Interpretación técnica: inspeccionamos las primeras cinco filas y siete columnas por posición. Esta muestra permite comprobar el formato, pero no representa por sí sola todo el dataset.</p>
+</section>
 </section>
 <section id="análisis-avanzado-con-pandas" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-avanzado-con-pandas">3. Análisis avanzado con Pandas</h2>
 <section id="agrupación-con-groupby" class="level3">
 <h3 class="anchored" data-anchor-id="agrupación-con-groupby">3.1 Agrupación con <code>groupby</code></h3>
-<p>Analizamos qué departamento recibe más tickets según el tipo de incidencia.</p>
-<div id="d6498522" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>carga_por_cola <span class="op">=</span> df.groupby([<span class="st">"queue"</span>, <span class="st">"type"</span>]).size().unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>carga_por_cola</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<p>Contamos los tickets de cada combinación de departamento y tipo.</p>
+<div id="2783bd59" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>carga_por_cola <span class="op">=</span> (</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"type"</span>], dropna<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>carga_por_cola</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -358,10 +792,10 @@ Filas duplicadas:
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th">type</th>
-<th data-quarto-table-cell-role="th">Change</th>
-<th data-quarto-table-cell-role="th">Incident</th>
-<th data-quarto-table-cell-role="th">Problem</th>
-<th data-quarto-table-cell-role="th">Request</th>
+<th data-quarto-table-cell-role="th">change</th>
+<th data-quarto-table-cell-role="th">incident</th>
+<th data-quarto-table-cell-role="th">problem</th>
+<th data-quarto-table-cell-role="th">request</th>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">queue</th>
@@ -448,23 +882,41 @@ Filas duplicadas:
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> el <code>groupby</code> agrupa los tickets por departamento y tipo. Después, <code>size()</code> cuenta cuántos tickets hay en cada grupo y <code>unstack()</code> convierte los tipos de ticket en columnas. Si un departamento concentra muchos incidentes, es un posible cuello de botella. Como acción, se podría reforzar ese equipo, redistribuir tickets o automatizar las consultas más repetitivas.</p>
+<p>Interpretación técnica: <code>groupby</code> forma grupos, <code>size()</code> cuenta filas y <code>unstack()</code> convierte tipos en columnas. Incluimos grupos con categorías ausentes. La tabla mide volumen, no esfuerzo de resolución.</p>
+<div id="b065fb5d" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>volumen_por_cola <span class="op">=</span> df[<span class="st">"queue"</span>].value_counts()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    cola_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    tickets_cola_principal <span class="op">=</span> <span class="bu">int</span>(volumen_por_cola.<span class="bu">max</span>())</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    porcentaje_cola_principal <span class="op">=</span> tickets_cola_principal <span class="op">/</span> <span class="bu">len</span>(df) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"El departamento con más tickets es </span><span class="sc">{</span>cola_principal<span class="sc">}</span><span class="ss">, "</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"con </span><span class="sc">{</span>tickets_cola_principal<span class="sc">}</span><span class="ss"> registros "</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"(</span><span class="sc">{</span>porcentaje_cola_principal<span class="sc">:.2f}</span><span class="ss">% del total)."</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No hay departamentos informados para comparar."</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>El departamento con más tickets es Technical Support, con 5824 registros (29.12% del total).</code></pre>
+</div>
+</div>
+<p>Acción propuesta: revisar las categorías del departamento con mayor volumen y estudiar documentación, asignación o automatización. Para demostrar saturación harían falta datos de personal, pendientes y tiempos de resolución.</p>
 </section>
 <section id="tabla-dinámica-con-pivot_table" class="level3">
 <h3 class="anchored" data-anchor-id="tabla-dinámica-con-pivot_table">3.2 Tabla dinámica con <code>pivot_table</code></h3>
-<p>Cruzamos la prioridad con el idioma para comprobar si los tickets urgentes se concentran en algún idioma.</p>
-<div id="7504885c" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tabla_dinamica <span class="op">=</span> pd.pivot_table(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    df,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span><span class="st">"priority"</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span><span class="st">"language"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    values<span class="op">=</span><span class="st">"subject"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    aggfunc<span class="op">=</span><span class="st">"count"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    fill_value<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>tabla_dinamica</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<p>Utilizamos una columna auxiliar de valor 1 para contar registros sin depender de que el asunto esté informado.</p>
+<div id="7e89c02d" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_pivot <span class="op">=</span> df.assign(numero_ticket<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tabla_dinamica <span class="op">=</span> pd.pivot_table(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    df_pivot,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span><span class="st">"priority"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span><span class="st">"language"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    values<span class="op">=</span><span class="st">"numero_ticket"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    aggfunc<span class="op">=</span><span class="st">"sum"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    fill_value<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>tabla_dinamica</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -484,18 +936,18 @@ Filas duplicadas:
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">high</th>
-<td>3048</td>
-<td>4150</td>
+<td>3230</td>
+<td>4571</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">low</th>
-<td>1586</td>
-<td>2201</td>
+<td>1655</td>
+<td>2400</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">medium</th>
-<td>3014</td>
-<td>4540</td>
+<td>3192</td>
+<td>4952</td>
 </tr>
 </tbody>
 </table>
@@ -503,19 +955,47 @@ Filas duplicadas:
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> la <code>pivot_table</code> resume el número de tickets cruzando dos variables categóricas: prioridad e idioma. Cada celda indica cuántos tickets existen para esa combinación. Si los tickets de prioridad alta están concentrados en un idioma, el equipo de guardia debe contar con personal capaz de atenderlos sin retrasos.</p>
+<p>Interpretación técnica: cada celda cuenta tickets por prioridad e idioma, excluyendo registros sin alguna de estas categorías. Un idioma con más tickets urgentes también puede tener más tickets en general; no debe confundirse volumen con proporción de urgencia.</p>
+<div id="11dd3a27" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>altos_por_idioma <span class="op">=</span> (</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    df.loc[df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>).fillna(<span class="va">False</span>), <span class="st">"language"</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    .value_counts()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> altos_por_idioma.empty:</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    idioma_principal <span class="op">=</span> altos_por_idioma.idxmax()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    cantidad_altos <span class="op">=</span> <span class="bu">int</span>(altos_por_idioma.<span class="bu">max</span>())</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"El idioma con más tickets de prioridad alta es "</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>idioma_principal<span class="sc">}</span><span class="ss">, con </span><span class="sc">{</span>cantidad_altos<span class="sc">}</span><span class="ss"> tickets."</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No hay tickets de prioridad alta con idioma informado."</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>El idioma con más tickets de prioridad alta es en, con 4571 tickets.</code></pre>
+</div>
+</div>
+<p>Acción propuesta: comprobar capacidad lingüística para atender los tickets urgentes. No puede concluirse que el idioma cause la prioridad o retrasos de resolución.</p>
 </section>
 <section id="filtrado-avanzado-con-loc" class="level3">
 <h3 class="anchored" data-anchor-id="filtrado-avanzado-con-loc">3.3 Filtrado avanzado con <code>loc</code></h3>
-<p>Aislamos los tickets más críticos: prioridad alta y tipo incidente.</p>
-<div id="4eae3099" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tickets_urgentes <span class="op">=</span> df.loc[</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    (df[<span class="st">"priority"</span>] <span class="op">==</span> <span class="st">"high"</span>) <span class="op">&amp;</span> (df[<span class="st">"type"</span>] <span class="op">==</span> <span class="st">"Incident"</span>),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"queue"</span>, <span class="st">"subject"</span>, <span class="st">"language"</span>]</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>tickets_urgentes.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<p>Seleccionamos prioridad alta y tipo incidente, mostrando las columnas relevantes para una primera revisión.</p>
+<div id="2eb8fcdc" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>condicion_urgentes <span class="op">=</span> (</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"priority"</span>].eq(<span class="st">"high"</span>) <span class="op">&amp;</span> df[<span class="st">"type"</span>].eq(<span class="st">"incident"</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>).fillna(<span class="va">False</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>tickets_urgentes <span class="op">=</span> df.loc[</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    condicion_urgentes,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"queue"</span>, <span class="st">"subject"</span>, <span class="st">"language"</span>]</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Incidentes de prioridad alta: </span><span class="sc">{</span><span class="bu">len</span>(tickets_urgentes)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Porcentaje sobre el total: </span><span class="sc">{</span><span class="bu">len</span>(tickets_urgentes) <span class="op">/</span> <span class="bu">len</span>(df) <span class="op">*</span> <span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>tickets_urgentes.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Incidentes de prioridad alta: 3526
+Porcentaje sobre el total: 17.63%</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
@@ -595,28 +1075,30 @@ Filas duplicadas:
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> <code>loc</code> permite seleccionar filas que cumplen varias condiciones lógicas y, al mismo tiempo, elegir solo las columnas que nos interesan. Estos tickets representan los casos que un SysAdmin debería revisar primero al iniciar su turno, porque combinan alta urgencia con un incidente.</p>
+<p>Interpretación técnica: <code>loc</code> combina condiciones y selecciona columnas. La lista apoya el triaje, pero no es una alerta temprana ni sustituye la confirmación de impacto, servicio afectado y acuerdos de nivel de servicio.</p>
 </section>
-<section id="combinación-de-datos-con-concat" class="level3">
-<h3 class="anchored" data-anchor-id="combinación-de-datos-con-concat">3.4 Combinación de datos con <code>concat</code></h3>
-<p>Aunque trabajamos con un único dataset, dividimos los tickets por idioma y los volvemos a unir para demostrar el uso de <code>concat</code>.</p>
-<div id="0e2aee56" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_ingles <span class="op">=</span> df[df[<span class="st">"language"</span>] <span class="op">==</span> <span class="st">"en"</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_aleman <span class="op">=</span> df[df[<span class="st">"language"</span>] <span class="op">==</span> <span class="st">"de"</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>df_combinado <span class="op">=</span> pd.concat([df_ingles, df_aleman])</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets en inglés: </span><span class="sc">{</span><span class="bu">len</span>(df_ingles)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets en alemán: </span><span class="sc">{</span><span class="bu">len</span>(df_aleman)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets combinados: </span><span class="sc">{</span><span class="bu">len</span>(df_combinado)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>df_combinado.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="combinación-de-subconjuntos-con-concat" class="level3">
+<h3 class="anchored" data-anchor-id="combinación-de-subconjuntos-con-concat">3.4 Combinación de subconjuntos con <code>concat</code></h3>
+<p>Como demostración didáctica, reunimos tickets en inglés y alemán.</p>
+<div id="5126268f" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df_ingles <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"en"</span>).fillna(<span class="va">False</span>)].copy()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>df_aleman <span class="op">=</span> df.loc[df[<span class="st">"language"</span>].eq(<span class="st">"de"</span>).fillna(<span class="va">False</span>)].copy()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>df_combinado <span class="op">=</span> pd.concat([df_ingles, df_aleman], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets en inglés: </span><span class="sc">{</span><span class="bu">len</span>(df_ingles)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets en alemán: </span><span class="sc">{</span><span class="bu">len</span>(df_aleman)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets combinados: </span><span class="sc">{</span><span class="bu">len</span>(df_combinado)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets del dataset completo: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets no incluidos: </span><span class="sc">{</span><span class="bu">len</span>(df) <span class="op">-</span> <span class="bu">len</span>(df_combinado)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>df_combinado.head()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tickets en inglés: 11923
 Tickets en alemán: 8077
-Tickets combinados: 20000</code></pre>
+Tickets combinados: 20000
+Tickets del dataset completo: 20000
+Tickets no incluidos: 0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -643,11 +1125,11 @@ Tickets combinados: 20000</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">1</th>
+<th data-quarto-table-cell-role="th">0</th>
 <td>Customer Support Inquiry</td>
 <td>Seeking information on digital strategies that...</td>
 <td>We offer a variety of digital strategies and s...</td>
-<td>Request</td>
+<td>request</td>
 <td>Customer Service</td>
 <td>medium</td>
 <td>en</td>
@@ -661,11 +1143,11 @@ Tickets combinados: 20000</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">2</th>
+<th data-quarto-table-cell-role="th">1</th>
 <td>Data Analytics for Investment</td>
 <td>I am contacting you to request information on ...</td>
 <td>I am here to assist you with data analytics to...</td>
-<td>Request</td>
+<td>request</td>
 <td>Customer Service</td>
 <td>medium</td>
 <td>en</td>
@@ -679,11 +1161,11 @@ Tickets combinados: 20000</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
+<th data-quarto-table-cell-role="th">2</th>
 <td>Security</td>
 <td>Dear Customer Support, I am reaching out to in...</td>
 <td>Dear [name], we take the security of medical d...</td>
-<td>Request</td>
+<td>request</td>
 <td>Customer Service</td>
 <td>medium</td>
 <td>en</td>
@@ -697,11 +1179,11 @@ Tickets combinados: 20000</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
+<th data-quarto-table-cell-role="th">3</th>
 <td>Concerns About Securing Medical Data on 2-in-1...</td>
 <td>Inquiring about best practices for securing me...</td>
 <td>Thank you for your concern regarding securing ...</td>
-<td>Request</td>
+<td>request</td>
 <td>Technical Support</td>
 <td>medium</td>
 <td>en</td>
@@ -715,11 +1197,11 @@ Tickets combinados: 20000</code></pre>
 <td>NaN</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">7</th>
+<th data-quarto-table-cell-role="th">4</th>
 <td>Problem with Integration</td>
 <td>The integration stopped working unexpectedly, ...</td>
 <td>I will look into the problem and call you at &lt;...</td>
-<td>Problem</td>
+<td>problem</td>
 <td>IT Support</td>
 <td>high</td>
 <td>en</td>
@@ -738,141 +1220,133 @@ Tickets combinados: 20000</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> <code>concat</code> une dos DataFrames verticalmente. En este caso separamos los tickets por idioma para poder analizarlos por partes y después los reunimos. Esta técnica sería útil si tuviéramos varios archivos de logs o tickets y quisiéramos construir un histórico único.</p>
+<p>Interpretación técnica: <code>concat</code> reúne filas e <code>ignore_index=True</code> genera un índice consecutivo. No incorpora fuentes externas y solo incluye los dos idiomas seleccionados. En un caso real permitiría reunir exportaciones con estructura compatible.</p>
 </section>
 </section>
 <section id="visualizaciones" class="level2">
 <h2 class="anchored" data-anchor-id="visualizaciones">4. Visualizaciones</h2>
-<section id="gráfico-estático-prioridad-de-los-tickets" class="level3">
-<h3 class="anchored" data-anchor-id="gráfico-estático-prioridad-de-los-tickets">4.1 Gráfico estático: prioridad de los tickets</h3>
-<div id="6af7acc6" class="cell" data-execution_count="9">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>orden_prioridad <span class="op">=</span> [<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>]</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>conteo <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts().reindex(orden_prioridad)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>colores <span class="op">=</span> {</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"low"</span>: <span class="st">"#2ecc71"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"medium"</span>: <span class="st">"#f39c12"</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"high"</span>: <span class="st">"#e74c3c"</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">4.5</span>))</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.barplot(</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>conteo.index,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>conteo.values,</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span>conteo.index,</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span>colores,</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>ax.set_title(</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Volumen de tickets por nivel de prioridad"</span>,</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">14</span>,</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    fontweight<span class="op">=</span><span class="st">"bold"</span>,</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    pad<span class="op">=</span><span class="dv">15</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Nivel de prioridad"</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Número de tickets"</span>, fontsize<span class="op">=</span><span class="dv">11</span>)</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> contenedor <span class="kw">in</span> ax.containers:</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    ax.bar_label(contenedor, padding<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>sns.despine()</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="preparación-de-prioridades-y-colores" class="level3">
+<h3 class="anchored" data-anchor-id="preparación-de-prioridades-y-colores">4.1 Preparación de prioridades y colores</h3>
+<div id="68c337c7" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>prioridades_presentes <span class="op">=</span> df[<span class="st">"priority"</span>].dropna().unique().tolist()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>orden_base <span class="op">=</span> [<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>otras_prioridades <span class="op">=</span> <span class="bu">sorted</span>(p <span class="cf">for</span> p <span class="kw">in</span> prioridades_presentes <span class="cf">if</span> p <span class="kw">not</span> <span class="kw">in</span> orden_base)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>orden_prioridad <span class="op">=</span> orden_base <span class="op">+</span> otras_prioridades</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>colores_prioridad <span class="op">=</span> {</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"low"</span>: <span class="st">"#2ecc71"</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"medium"</span>: <span class="st">"#f39c12"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"high"</span>: <span class="st">"#e74c3c"</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> prioridad <span class="kw">in</span> otras_prioridades:</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    colores_prioridad[prioridad] <span class="op">=</span> <span class="st">"#7f8c8d"</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Orden de prioridades:"</span>, orden_prioridad)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets sin prioridad: </span><span class="sc">{</span>df[<span class="st">'priority'</span>]<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tickets sin departamento: </span><span class="sc">{</span>df[<span class="st">'queue'</span>]<span class="sc">.</span>isna()<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Orden de prioridades: ['low', 'medium', 'high']
+Tickets sin prioridad: 0
+Tickets sin departamento: 0</code></pre>
+</div>
+</div>
+<p>Criterio visual: mantenemos colores coherentes y añadimos etiquetas para no depender exclusivamente del color. Los gráficos excluyen valores ausentes en las categorías que necesitan; las prioridades adicionales se incorporan en gris.</p>
+</section>
+<section id="gráfico-estático-tickets-por-prioridad" class="level3">
+<h3 class="anchored" data-anchor-id="gráfico-estático-tickets-por-prioridad">4.2 Gráfico estático: tickets por prioridad</h3>
+<div id="a5d06a88" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>conteo <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts().reindex(orden_prioridad, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fig_estatico, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">4.5</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>barras <span class="op">=</span> ax.bar(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    conteo.index, conteo.values,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>[colores_prioridad[p] <span class="cf">for</span> p <span class="kw">in</span> conteo.index]</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>ax.bar_label(barras, padding<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Volumen de tickets por nivel de prioridad"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">"bold"</span>, pad<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Nivel de prioridad"</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Número de tickets"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="bu">max</span>(<span class="bu">int</span>(conteo.<span class="bu">max</span>()), <span class="dv">1</span>) <span class="op">*</span> <span class="fl">1.15</span>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">"x"</span>, visible<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>sns.despine(ax<span class="op">=</span>ax)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>fig_estatico.tight_layout()</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-10-output-1.png" width="848" height="416" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-19-output-1.png" width="848" height="416" class="figure-img"></p>
 <figcaption>Distribución de tickets por nivel de prioridad</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> este gráfico muestra cómo se reparte la carga según la urgencia. Si predominan los tickets de prioridad media o alta, el equipo necesita un sistema claro de triaje para atender primero las incidencias críticas.</p>
+<p>Interpretación técnica: alturas y etiquetas comparan el número de tickets, no su tiempo de resolución. Se revisarían los criterios de clasificación y el triaje antes de modificar la dotación del equipo.</p>
 </section>
-<section id="gráfico-estático-mapa-de-calor" class="level3">
-<h3 class="anchored" data-anchor-id="gráfico-estático-mapa-de-calor">4.2 Gráfico estático: mapa de calor</h3>
-<div id="532e24b8" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_apilado <span class="op">=</span> (</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>])</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    .reindex(columns<span class="op">=</span>[<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>])</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>colores <span class="op">=</span> [<span class="st">"#2ecc71"</span>, <span class="st">"#f39c12"</span>, <span class="st">"#e74c3c"</span>]</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>df_apilado.plot(</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    kind<span class="op">=</span><span class="st">"barh"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    stacked<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>colores,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>),</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    width<span class="op">=</span><span class="fl">0.8</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>plt.title(</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Carga total por departamento y prioridad"</span>,</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    fontsize<span class="op">=</span><span class="dv">14</span>,</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    fontweight<span class="op">=</span><span class="st">"bold"</span>,</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    pad<span class="op">=</span><span class="dv">15</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Número de tickets"</span>)</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Departamento"</span>)</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">"Prioridad"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">1.02</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="gráfico-estático-carga-por-departamento-y-prioridad" class="level3">
+<h3 class="anchored" data-anchor-id="gráfico-estático-carga-por-departamento-y-prioridad">4.3 Gráfico estático: carga por departamento y prioridad</h3>
+<div id="a62262a2" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_apilado <span class="op">=</span> (</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    .unstack(fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    .reindex(columns<span class="op">=</span>orden_prioridad, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> df_apilado.empty:</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No hay datos con departamento y prioridad para este gráfico."</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    orden_departamentos <span class="op">=</span> df_apilado.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).sort_values().index</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    df_apilado <span class="op">=</span> df_apilado.loc[orden_departamentos]</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> df_apilado.plot(</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        kind<span class="op">=</span><span class="st">"barh"</span>, stacked<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span>[colores_prioridad[p] <span class="cf">for</span> p <span class="kw">in</span> df_apilado.columns],</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">7</span>), width<span class="op">=</span><span class="fl">0.8</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">"Volumen de tickets por departamento y prioridad"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, fontweight<span class="op">=</span><span class="st">"bold"</span>, pad<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Número de tickets"</span>)</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Departamento"</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    ax.legend(title<span class="op">=</span><span class="st">"Prioridad"</span>, bbox_to_anchor<span class="op">=</span>(<span class="fl">1.02</span>, <span class="dv">1</span>), loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    ax.grid(axis<span class="op">=</span><span class="st">"y"</span>, visible<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    sns.despine(ax<span class="op">=</span>ax)</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-11-output-1.png" width="934" height="560" class="figure-img"></p>
-<figcaption>Carga total por departamento, desglosada por prioridad</figcaption>
+<p><img src="index_files/figure-html/cell-20-output-1.png" width="1031" height="656" class="figure-img"></p>
+<figcaption>Volumen por departamento, desglosado por prioridad</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> el mapa de calor facilita detectar de un vistazo qué combinación de departamento y tipo de ticket genera más trabajo. Las celdas más oscuras o rojas indican mayor carga operativa y, por tanto, posibles áreas donde aplicar automatización o más personal.</p>
+<p>Interpretación técnica: cada barra representa tickets con departamento y prioridad informados. Los segmentos muestran su composición. Una barra larga no demuestra saturación: deben contrastarse complejidad, personal y tiempos.</p>
+<p>Acción propuesta: revisar las categorías del departamento con mayor volumen y valorar mejoras de documentación, enrutamiento o automatización.</p>
 </section>
 <section id="gráfico-interactivo-con-plotly" class="level3">
-<h3 class="anchored" data-anchor-id="gráfico-interactivo-con-plotly">4.3 Gráfico interactivo con Plotly</h3>
-<div id="549f523a" class="cell" data-execution_count="11">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df_plotly <span class="op">=</span> (</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>])</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    .size()</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    .reset_index(name<span class="op">=</span><span class="st">"cantidad"</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> px.bar(</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    df_plotly,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"queue"</span>,</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"cantidad"</span>,</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span><span class="st">"priority"</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    barmode<span class="op">=</span><span class="st">"group"</span>,</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    template<span class="op">=</span><span class="st">"plotly_white"</span>,</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    category_orders<span class="op">=</span>{<span class="st">"priority"</span>: [<span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span>]},</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    color_discrete_map<span class="op">=</span>{</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"low"</span>: <span class="st">"#2ecc71"</span>,</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"medium"</span>: <span class="st">"#f39c12"</span>,</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"high"</span>: <span class="st">"#e74c3c"</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"&lt;b&gt;Distribución interactiva de carga por departamento y prioridad&lt;/b&gt;"</span></span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    xaxis_title<span class="op">=</span><span class="st">"Departamento"</span>,</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    yaxis_title<span class="op">=</span><span class="st">"Número de tickets"</span>,</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    legend_title<span class="op">=</span><span class="st">"Prioridad"</span>,</span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    font<span class="op">=</span><span class="bu">dict</span>(family<span class="op">=</span><span class="st">"Arial"</span>, size<span class="op">=</span><span class="dv">12</span>),</span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    hovermode<span class="op">=</span><span class="st">"x unified"</span></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<h3 class="anchored" data-anchor-id="gráfico-interactivo-con-plotly">4.4 Gráfico interactivo con Plotly</h3>
+<div id="e212dd21" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_plotly <span class="op">=</span> (</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    df.groupby([<span class="st">"queue"</span>, <span class="st">"priority"</span>]).size()</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    .reset_index(name<span class="op">=</span><span class="st">"cantidad"</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> df_plotly.empty:</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"No hay datos con departamento y prioridad para este gráfico."</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> px.bar(</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>        df_plotly, x<span class="op">=</span><span class="st">"queue"</span>, y<span class="op">=</span><span class="st">"cantidad"</span>, color<span class="op">=</span><span class="st">"priority"</span>,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        barmode<span class="op">=</span><span class="st">"group"</span>, template<span class="op">=</span><span class="st">"plotly_white"</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>        category_orders<span class="op">=</span>{<span class="st">"priority"</span>: orden_prioridad},</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        color_discrete_map<span class="op">=</span>colores_prioridad,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        labels<span class="op">=</span>{<span class="st">"queue"</span>: <span class="st">"Departamento"</span>, <span class="st">"cantidad"</span>: <span class="st">"Número de tickets"</span>, <span class="st">"priority"</span>: <span class="st">"Prioridad"</span>},</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">"Tickets por departamento y prioridad"</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    fig.update_layout(</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>        font<span class="op">=</span><span class="bu">dict</span>(family<span class="op">=</span><span class="st">"Arial"</span>, size<span class="op">=</span><span class="dv">12</span>),</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        hovermode<span class="op">=</span><span class="st">"x unified"</span>, xaxis_tickangle<span class="op">=-</span><span class="dv">35</span>,</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        margin<span class="op">=</span><span class="bu">dict</span>(b<span class="op">=</span><span class="dv">130</span>)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    fig.show()</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div style="height:525px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="dd589ae4-563e-4228-aff8-a60f32010a3f" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("dd589ae4-563e-4228-aff8-a60f32010a3f")) {                    Plotly.newPlot(                        "dd589ae4-563e-4228-aff8-a60f32010a3f",                        [{"alignmentgroup":"True","hovertemplate":"priority=low\u003cbr\u003equeue=%{x}\u003cbr\u003ecantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"priority=medium\u003cbr\u003equeue=%{x}\u003cbr\u003ecantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"priority=high\u003cbr\u003equeue=%{x}\u003cbr\u003ecantidad=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"\u003cb\u003eDistribuci\u00f3n interactiva de carga por departamento y prioridad\u003c\u002fb\u003e"},"barmode":"group","font":{"family":"Arial","size":12},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="0d9730c2-217e-4b82-b201-2f6a2ce7f4e9" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("0d9730c2-217e-4b82-b201-2f6a2ce7f4e9")) {                    Plotly.newPlot(                        "0d9730c2-217e-4b82-b201-2f6a2ce7f4e9",                        [{"alignmentgroup":"True","hovertemplate":"Prioridad=low\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"low","marker":{"color":"#2ecc71","pattern":{"shape":""}},"name":"low","offsetgroup":"low","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"xgHIA60AmgDnAMUCYQHNAF0AywI="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=medium\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"medium","marker":{"color":"#f39c12","pattern":{"shape":""}},"name":"medium","offsetgroup":"medium","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"EAQ3BjAAkAC3Ay8HqgEHAYQArgY="},"yaxis":"y","type":"bar"},{"alignmentgroup":"True","hovertemplate":"Prioridad=high\u003cbr\u003eDepartamento=%{x}\u003cbr\u003eN\u00famero de tickets=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"high","marker":{"color":"#e74c3c","pattern":{"shape":""}},"name":"high","offsetgroup":"high","orientation":"v","showlegend":true,"textposition":"auto","x":["Billing and Payments","Customer Service","General Inquiry","Human Resources","IT Support","Product Support","Returns and Exchanges","Sales and Pre-Sales","Service Outages and Maintenance","Technical Support"],"xaxis":"x","y":{"dtype":"i2","bdata":"UAJRAioAKABWBIgE3gBoABsCRw0="},"yaxis":"y","type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Departamento"},"tickangle":-35},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"N\u00famero de tickets"}},"legend":{"title":{"text":"Prioridad"},"tracegroupgap":0},"title":{"text":"Tickets por departamento y prioridad"},"barmode":"group","font":{"family":"Arial","size":12},"margin":{"b":130},"hovermode":"x unified"},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('dd589ae4-563e-4228-aff8-a60f32010a3f');
+var gd = document.getElementById('0d9730c2-217e-4b82-b201-2f6a2ce7f4e9');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -895,30 +1369,90 @@ if (outputEl) {{
 }}
 
                         })                };            </script>        </div>
-<p>Carga interactiva por departamento y prioridad</p>
+<p>Comparación interactiva de tickets por departamento y prioridad</p>
 </div>
 </div>
-<p><strong>Interpretación técnica:</strong> este gráfico interactivo permite comparar la carga de cada departamento según la prioridad. Al ser interactivo, se pueden ocultar categorías, ver valores exactos al pasar el ratón y analizar mejor qué equipos necesitan refuerzo.</p>
+<p>Interpretación técnica: el ratón permite consultar valores exactos y la leyenda permite ocultar categorías. Complementa las barras apiladas al facilitar comparaciones de prioridades individuales entre departamentos.</p>
+<p>Acción propuesta: examinar los tickets de prioridad alta por departamento y seleccionar áreas que necesiten revisión detallada.</p>
+</section>
+<section id="limitación-del-requisito-temporal" class="level3">
+<h3 class="anchored" data-anchor-id="limitación-del-requisito-temporal">4.5 Limitación del requisito temporal</h3>
+<p>El gráfico interactivo compara categorías, pero no representa evolución temporal. La lista de columnas se muestra en el apartado 2.1 y debe revisarse para comprobar si existe una fecha de creación válida.</p>
+<p>No se utilizarán el orden de filas ni una columna de versión como sustitutos de fechas. Si no existe una variable temporal adecuada, será necesario incorporar datos con fechas o consultar al profesor si acepta esta alternativa categórica.</p>
+<p>El requisito temporal queda pendiente: no se considera cumplido únicamente por disponer de un gráfico interactivo.</p>
 </section>
 </section>
 <section id="conclusiones" class="level2">
 <h2 class="anchored" data-anchor-id="conclusiones">5. Conclusiones</h2>
+<section id="resultados-calculados" class="level3">
+<h3 class="anchored" data-anchor-id="resultados-calculados">5.1 Resultados calculados</h3>
+<div id="97180260" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Registros analizados: </span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> volumen_por_cola.empty:</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    departamento_principal <span class="op">=</span> volumen_por_cola.idxmax()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    cantidad_departamento <span class="op">=</span> <span class="bu">int</span>(volumen_por_cola.<span class="bu">max</span>())</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Departamento con mayor volumen: </span><span class="sc">{</span>departamento_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_departamento<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>prioridades_validas <span class="op">=</span> df[<span class="st">"priority"</span>].value_counts()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> prioridades_validas.empty:</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    prioridad_principal <span class="op">=</span> prioridades_validas.idxmax()</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    cantidad_prioridad <span class="op">=</span> <span class="bu">int</span>(prioridades_validas.<span class="bu">max</span>())</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Prioridad más frecuente: </span><span class="sc">{</span>prioridad_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_prioridad<span class="sc">}</span><span class="ss"> tickets)."</span>)</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Incidentes de prioridad alta seleccionados: </span><span class="sc">{</span><span class="bu">len</span>(tickets_urgentes)<span class="sc">}</span><span class="ss">."</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> altos_por_idioma.empty:</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    idioma_principal <span class="op">=</span> altos_por_idioma.idxmax()</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    cantidad_altos <span class="op">=</span> <span class="bu">int</span>(altos_por_idioma.<span class="bu">max</span>())</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Idioma con más tickets de prioridad alta: </span><span class="sc">{</span>idioma_principal<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>cantidad_altos<span class="sc">}</span><span class="ss"> tickets)."</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Registros analizados: 20000
+Departamento con mayor volumen: Technical Support (5824 tickets).
+Prioridad más frecuente: medium (8144 tickets).
+Incidentes de prioridad alta seleccionados: 3526.
+Idioma con más tickets de prioridad alta: en (4571 tickets).</code></pre>
+</div>
+</div>
+</section>
+<section id="propuestas-desde-la-administración-de-sistemas" class="level3">
+<h3 class="anchored" data-anchor-id="propuestas-desde-la-administración-de-sistemas">5.2 Propuestas desde la administración de sistemas</h3>
 <ol type="1">
-<li><p><strong>Carga operativa:</strong> el análisis con <code>groupby</code> permite identificar el departamento con más tickets e incidentes. Ese sería el principal candidato para recibir más recursos o automatización.</p></li>
-<li><p><strong>Priorización:</strong> el filtrado con <code>loc</code> permite crear una lista de tickets críticos que deberían atenderse primero en cada turno.</p></li>
-<li><p><strong>Idiomas y guardias:</strong> la <code>pivot_table</code> muestra la relación entre prioridad e idioma. Si hay muchos tickets urgentes en inglés, el personal de guardia debería tener un nivel adecuado de ese idioma.</p></li>
-<li><p><strong>Automatización:</strong> los tickets repetitivos y de baja prioridad podrían resolverse con respuestas automáticas, base de conocimiento o chatbots, reduciendo la carga del soporte técnico.</p></li>
-<li><p><strong>Monitorización:</strong> este tipo de análisis puede convertirse en un panel de control periódico para detectar aumentos anómalos de incidencias y actuar antes de que afecten al servicio.</p></li>
+<li>Distribución del volumen: revisar departamentos y categorías antes de decidir cambios de recursos.</li>
+<li>Priorización: utilizar el filtro como apoyo al triaje, confirmando impacto y servicios afectados.</li>
+<li>Atención por idioma: comprobar competencias lingüísticas para los tickets urgentes.</li>
+<li>Automatización: analizar asuntos y categorías repetitivas antes de proponer respuestas automáticas o una base de conocimiento.</li>
+<li>Calidad de datos: normalizar categorías y documentar nulos y duplicados antes de construir indicadores.</li>
 </ol>
 </section>
-<section id="referencias-técnicas" class="level2">
-<h2 class="anchored" data-anchor-id="referencias-técnicas">Referencias técnicas</h2>
+<section id="limitaciones" class="level3">
+<h3 class="anchored" data-anchor-id="limitaciones">5.3 Limitaciones</h3>
 <ul>
-<li>Pandas User Guide: https://pandas.pydata.org/docs/user_guide/</li>
-<li>Seaborn: <code>set_theme()</code>, <code>barplot()</code> y <code>heatmap()</code>: https://seaborn.pydata.org/</li>
-<li>Plotly Python: plantillas y colores discretos: https://plotly.com/python/templates/ y https://plotly.com/python/discrete-color/</li>
-<li>Matplotlib: ajuste de márgenes con <code>tight_layout()</code>: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html</li>
+<li>Los datos son sintéticos y no demuestran el comportamiento real de una empresa.</li>
+<li>El volumen no mide complejidad ni esfuerzo de resolución.</li>
+<li>Sin datos de personal y tiempos no se demuestra saturación.</li>
+<li><code>concat</code> reúne subconjuntos del mismo archivo, no fuentes independientes.</li>
+<li>Las agrupaciones excluyen categorías ausentes salvo donde se indica lo contrario.</li>
+<li>Si hay empates en los máximos, el texto automático muestra una de las categorías empatadas.</li>
+<li>El análisis temporal sigue pendiente de verificar una fecha válida o acordar una alternativa.</li>
 </ul>
+</section>
+</section>
+<section id="fuentes-y-metodología-de-trabajo" class="level2">
+<h2 class="anchored" data-anchor-id="fuentes-y-metodología-de-trabajo">6. Fuentes y metodología de trabajo</h2>
+<p>El código utiliza como referencia la documentación oficial y adapta las operaciones al dataset. La personalización visual emplea colores coherentes, etiquetas, ordenación y una plantilla clara para facilitar la interpretación, no modificar los resultados.</p>
+<section id="fuentes-consultadas" class="level3">
+<h3 class="anchored" data-anchor-id="fuentes-consultadas">Fuentes consultadas</h3>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/tobiasbueck/multilingual-customer-support-tickets">Dataset de Tobias Bueck en Kaggle</a>.</li>
+<li><a href="https://pandas.pydata.org/docs/user_guide/">Guía de usuario de Pandas</a>.</li>
+<li><a href="https://pandas.pydata.org/docs/user_guide/groupby.html">Agrupaciones con Pandas</a>.</li>
+<li><a href="https://pandas.pydata.org/docs/user_guide/indexing.html">Selección e indexación</a>.</li>
+<li><a href="https://pandas.pydata.org/docs/user_guide/merging.html">Combinación de datos</a>.</li>
+<li><a href="https://seaborn.pydata.org/tutorial/aesthetics.html">Estética en Seaborn</a>.</li>
+<li><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.bar_label.html">Etiquetas de barras en Matplotlib</a>.</li>
+<li><a href="https://plotly.com/python/templates/">Plantillas de Plotly</a>.</li>
+<li><a href="https://plotly.com/python/discrete-color/">Colores discretos de Plotly</a>.</li>
+</ul>
+</section>
 </section>
 
 </main>
@@ -948,12 +1482,12 @@ if (outputEl) {{
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Copiado");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Copiado");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -1397,7 +1931,7 @@ if (outputEl) {{
   });
   </script>
   <script type="application/javascript">
-  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  window.quartoScrollableRegionsLabels = {"code":"Código desplazable","output":"Salida desplazable"};
   </script>
 </div> <!-- /content -->
 
